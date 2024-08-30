@@ -1,0 +1,88 @@
+{
+  "hash": "d9465c8a",
+  "configHash": "57fe35c2",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "5d0accfb",
+  "optimized": {
+    "@chakra-ui/avatar": {
+      "src": "../../node_modules/@chakra-ui/avatar/dist/index.mjs",
+      "file": "@chakra-ui_avatar.js",
+      "fileHash": "6ff187c0",
+      "needsInterop": false
+    },
+    "@chakra-ui/layout": {
+      "src": "../../node_modules/@chakra-ui/layout/dist/index.mjs",
+      "file": "@chakra-ui_layout.js",
+      "fileHash": "0f6c0322",
+      "needsInterop": false
+    },
+    "@chakra-ui/react": {
+      "src": "../../node_modules/@chakra-ui/react/dist/index.mjs",
+      "file": "@chakra-ui_react.js",
+      "fileHash": "c4e73b50",
+      "needsInterop": false
+    },
+    "@chakra-ui/theme-tools": {
+      "src": "../../node_modules/@chakra-ui/theme-tools/dist/index.mjs",
+      "file": "@chakra-ui_theme-tools.js",
+      "fileHash": "683e5d27",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "8cd11818",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "ef862392",
+      "needsInterop": true
+    },
+    "react-icons/bs": {
+      "src": "../../node_modules/react-icons/bs/index.mjs",
+      "file": "react-icons_bs.js",
+      "fileHash": "a75d169d",
+      "needsInterop": false
+    },
+    "react-icons/cg": {
+      "src": "../../node_modules/react-icons/cg/index.mjs",
+      "file": "react-icons_cg.js",
+      "fileHash": "62a0113b",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "ef9db8dd",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-WONWJOOS": {
+      "file": "chunk-WONWJOOS.js"
+    },
+    "chunk-45YLI4I5": {
+      "file": "chunk-45YLI4I5.js"
+    },
+    "chunk-R3KGRY4K": {
+      "file": "chunk-R3KGRY4K.js"
+    },
+    "chunk-FFLO7VTN": {
+      "file": "chunk-FFLO7VTN.js"
+    },
+    "chunk-ZIYUGMGG": {
+      "file": "chunk-ZIYUGMGG.js"
+    },
+    "chunk-2CVX3UOB": {
+      "file": "chunk-2CVX3UOB.js"
+    },
+    "chunk-65KY755N": {
+      "file": "chunk-65KY755N.js"
+    },
+    "chunk-V4OQ3NZ2": {
+      "file": "chunk-V4OQ3NZ2.js"
+    }
+  }
+}
