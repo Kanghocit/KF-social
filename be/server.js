@@ -13,7 +13,7 @@ connectDB();
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json()); // to prase  Json data in the req.body
 app.use(express.urlencoded({ extended: false})); // to prase from data in the req.body
