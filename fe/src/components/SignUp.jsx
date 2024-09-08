@@ -41,7 +41,7 @@ export default function Signup() {
 
     const handleSignup = async () => {
         try {
-            const res = fetch("/api/users/signup", {
+            const res = await fetch("/api/users/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function Signup() {
                 return;
             };
 
-            localStorage.setItem("user-KF", JSON.stringify(data))
+            localStorage.setItem("users-KF", JSON.stringify(data));
             setUser(data);
         } catch (error) {
             showToast("Error", error, "error");

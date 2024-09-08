@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import generateTokenAndSetCookie from "../utils/helpers/genarateTokenAndSetCookie.js";
-
+import { v2 as cloudinary } from "cloudinary";
 
 
 //sign up
@@ -29,7 +29,9 @@ const signupUser = async (req, res) => {
                 _id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
-                username: newUser.username
+                username: newUser.username,
+                bio: newUser.bio,
+                profilePicture: newUser.profilePicture,
             })
         }
         else {
@@ -58,6 +60,8 @@ const loginUser = async (req, res) => {
             email: user.email,
             name: user.name,
             username: user.username,
+            bio: user.bio,
+            profilePicture: user.profilePicture,
         })
 
     }
@@ -121,8 +125,8 @@ const followUnFollowUser = async (req, res) => {
 // update 
 const updateUser = async (req, res) => {
 
-    const { name, email, username, password, profilePicture, bio } = req.body;
-
+    const { name, email, username, password, bio } = req.body;
+    let { profilePicture } = req.body;
     const userId = req.user._id;
 
     try {
@@ -139,6 +143,14 @@ const updateUser = async (req, res) => {
             user.password = hashedPassword;
         }
 
+        if (profilePicture) {
+            if (user.profilePicture) {
+                await cloudinary.uploader.destroy(user.profilePicture.split("/").pop().split(".")[0])
+            }
+            const uploadedRespone = await cloudinary.uploader.upload(profilePicture);
+            profilePicture = uploadedRespone.secure_url;
+        }
+
         user.name = name || user.name;
         user.email = email || user.email;
         user.username = username || user.username;
@@ -146,8 +158,9 @@ const updateUser = async (req, res) => {
         user.bio = bio || user.bio;
 
         user = await user.save();
+        user.password = null
 
-        res.status(200).json({ message: "Profile updated successfully!", user });
+        res.status(200).json( user );
 
 
 
@@ -169,7 +182,7 @@ const getUserProfile = async (req, res) => {
         res.status(200).json(user)
     }
     catch (err) {
-        res.status(200).json({ error: err.message });
+        res.status(500).json({ error: err.message });
         console.log("Can't be get your userProfile!!");
     }
 }

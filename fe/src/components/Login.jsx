@@ -42,13 +42,18 @@ export default function Login() {
             });
             const data = await res.json();
             console.log(data);
+            if (data.error) {
+                showToast("Error", data.error, "error");
+                return;
+            }
+            localStorage.setItem("users-KF", JSON.stringify(data));
+            setUser(data);
         } catch (error) {
+            const errorMessage = error.message ? error.message : "Something went wrong";
             showToast("Error", error, "error");
-            return;
+
         }
-        console.log(data);
-        localStorage.setItem("user-KF", JSON.stringify(data));
-        setUser(data);
+
     }
 
     return (
@@ -56,7 +61,7 @@ export default function Login() {
             align={'center'}
             justify={'center'}
         >
-            <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+            <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6} my={6}>
                 <Stack align={'center'}>
                     <Heading fontSize={'4xl'} textAlign={'center'}>
                         Login
