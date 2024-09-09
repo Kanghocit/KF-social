@@ -2,10 +2,17 @@ import { Box, Flex, Link, VStack, Text } from "@chakra-ui/layout"
 import { Avatar } from "@chakra-ui/avatar"
 import { BsInstagram } from "react-icons/bs"
 import { CgMoreO } from "react-icons/cg"
-import { Menu, MenuButton, MenuItem, MenuList, Portal, useToast } from "@chakra-ui/react"
+import { Button, Menu, MenuButton, MenuItem, MenuList, Portal, useToast } from "@chakra-ui/react"
+import {useRecoilValue} from 'recoil';
+import userAtom from '../atoms/userAtom';
+import {Link as RouterLink} from 'react-router-dom'
 
-const UserHeader = () => {
+const UserHeader = ({ user }) => {
     const toast = useToast();
+    const currentUser = useRecoilValue(userAtom); //logged in user
+
+
+
 
     const copyURL = () => {
         const currentURL = window.location.href;
@@ -24,29 +31,47 @@ const UserHeader = () => {
             <Flex justifyContent={"space-between"} w={"full"}>
                 <Box>
                     <Text fontSize={"2xl"}>
-                        An Khang
+                        {user.name}
                     </Text>
                     <Flex gap={2} alignItems={"center"}>
-                        <Text fontSize={"sm"} >Kang15.8</Text>
+                        <Text fontSize={"sm"} >{user.username}</Text>
                         <Text fontSize={"xs"} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>KF.net</Text>
                     </Flex>
                 </Box>
                 <Box>
-                    <Avatar
-                        name="An Khang"
-                        src="/kang-avatar.png"
-                        size={{
-                            base: "md",
-                            md: "xl"
-                        }}
-                    />
+                    {user.profilePicture && (
+                        <Avatar
+                            name={user.name}
+                            src={user.profilePicture}
+                            size={{
+                                base: "md",
+                                md: "xl"
+                            }}
+                        />
+                    )}
+                    {!user.profilePicture && (
+                        <Avatar
+                            name={user.name}
+                            src='https://bit.ly/broken-link'
+                            size={{
+                                base: "md",
+                                md: "xl"
+                            }}
+                        />
+                    )}
                 </Box>
             </Flex>
 
-            <Text>Final year student of Industrial University.</Text>
+            <Text>{user.bio}</Text>
+
+            {currentUser._id === user._id &&(
+                <Link as={RouterLink} to="/update">
+                    <Button size={"sm"}> Update Profile</Button>
+                </Link>
+            )}
             <Flex w={"full"} justifyContent={"space-between"}>
                 <Flex gap={2} alignItems={"center"}>
-                    <Text color={"gray.light"}>1.5K followers</Text>
+                    <Text color={"gray.light"}>{user.followers.length} followers</Text>
                     <Box w={1} h={1} borderRadius={"full"} bg="gray.light"></Box>
                     <Link color={"gray.light"}>instagram.com</Link>
                 </Flex>
