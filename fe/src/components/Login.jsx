@@ -26,12 +26,14 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const setAuthScreen = useSetRecoilState(authScreenAtom);
     const setUser = useSetRecoilState(userAtom);
+
     const [inputs, setInputs] = useState({
         username: "",
         password: ""
     });
     const showToast = useShowToast();
     const handleLogin = async () => {
+      
         try {
             const res = await fetch("/api/users/login", {
                 method: "POST",
@@ -51,7 +53,6 @@ export default function Login() {
         } catch (error) {
             const errorMessage = error.message ? error.message : "Something went wrong";
             showToast("Error", error, "error");
-
         }
 
     }
@@ -113,6 +114,7 @@ export default function Login() {
                                     bg: useColorModeValue("gray.700", "gray.800"),
                                 }}
                                 onClick={handleLogin}
+                               
                             >
                                 Login
                             </Button>
