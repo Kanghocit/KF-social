@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import generateTokenAndSetCookie from "../utils/helpers/genarateTokenAndSetCookie.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 
 
 //sign up
@@ -160,7 +161,7 @@ const updateUser = async (req, res) => {
         user = await user.save();
         user.password = null
 
-        res.status(200).json( user );
+        res.status(200).json(user);
 
 
 
@@ -175,15 +176,24 @@ const updateUser = async (req, res) => {
 //get user profile 
 
 const getUserProfile = async (req, res) => {
-    const { username } = req.params;
+    // fetch user profile either with username or userId
+    // query is username or userID
+    const { query } = req.params;
     try {
-        const user = await User.findOne({ username }).select("-password").select("-updateAt");
-        if (!user) return res.status(400).json({ error: "User not found!" })
+        let user;
+
+        if (mongoose.Types.ObjectId.isValid(query)) {
+            user = await User.findOne({ _id: query }).select("-password").select("-updateAt");
+        } else {
+            //query is username 
+            user = await User.findOne({ username: query }).select("-password").select("-updateAt");
+        }
+        if (!user) return res.status(404).json({ error: "User not found!" })
         res.status(200).json(user)
     }
     catch (err) {
         res.status(500).json({ error: err.message });
-        console.log("Can't be get your userProfile!!");
+        console.log("Can't be get your userProfile!!", err);
     }
 }
 
