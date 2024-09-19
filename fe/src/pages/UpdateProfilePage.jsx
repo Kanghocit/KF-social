@@ -19,6 +19,7 @@ import { useRecoilState } from 'recoil'
 import userAtom from '../atoms/userAtom'
 import usePreviewImg from '../hooks/usePreviewImg';
 import useShowToast from '../hooks/useShowToast';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function UpdateProfilePage() {
@@ -35,12 +36,18 @@ export default function UpdateProfilePage() {
     const fileRef = useRef(null);
     const [updating, setUpdating] = useState(false);
 
-    const { handleImageChange, imgUrl } = usePreviewImg()
+    const { handleImageChange, imgUrl } = usePreviewImg();
     const showToast = useShowToast();
+    const navigate = useNavigate(); 
+
+    const comeToHomePage = () => {
+        navigate("/"); 
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(updating) return;
-        
+        if (updating) return;
+
         try {
             const res = await fetch(`/api/users/update/${user._id}`, {
                 method: "PUT",
@@ -49,26 +56,26 @@ export default function UpdateProfilePage() {
                 },
                 body: JSON.stringify({ ...inputs, profilePicture: imgUrl }),
             });
-    
+
             const data = await res.json();
-    
+
             console.log("API Response:", data);
-    
+
             if (data.error) {
                 showToast("Error", data.error, "error");
                 return;
             }
-    
+
             showToast("Success", "Profile updated successfully", "success");
             setUser(data);
             localStorage.setItem("users-KF", JSON.stringify(data));
         } catch (error) {
             showToast("Error", error.message || "An unexpected error occurred", "error");
-        }finally{
+        } finally {
             setUpdating(false);
         }
     };
-    
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -155,6 +162,7 @@ export default function UpdateProfilePage() {
                             bg={'red.400'}
                             color={'white'}
                             w="full"
+                            onClick={comeToHomePage}
                             _hover={{
                                 bg: 'red.500',
                             }}>
