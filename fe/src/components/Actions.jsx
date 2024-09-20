@@ -49,15 +49,17 @@ const Actions = ({ post }) => {
         },
         body: JSON.stringify({ text: reply }),
       });
-      const data = res.json();
+      const data = await res.json();
       if (data.error) return showToast("Error", data.error, "error");
+
       const updatePosts = posts.map((p) => {
-        if (p._id === post._id) {
+        if (p?._id === post?._id) {
           return { ...p, replies: [...p.replies, data] };
         }
         return p;
       });
       setPosts(updatePosts);
+
       showToast("Success", "Reply posted successfully", "success");
       onClose();
       setReply("");

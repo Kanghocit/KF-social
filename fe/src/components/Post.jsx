@@ -19,17 +19,13 @@ import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
 
 const Post = ({ post, postedBy }) => {
-  const [inputs, setInputs] = useState({
-    text: post.text,
-    img: post.img,
-  });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const showToast = useShowToast();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
-  const [ posts, setPosts] = useRecoilState(postsAtom)
- 
+  const [posts, setPosts] = useRecoilState(postsAtom);
+  
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -133,12 +129,12 @@ const Post = ({ post, postedBy }) => {
               border={"1px solid"}
               borderColor={"gray.light"}
             >
-              <Image src={post.img} w={"full"} />
+              <Image src={post.img} w={"full"} maxHeight={"400px"} />
             </Box>
           </Link>
         )}
         <Flex gap={3} my={1}>
-          <Actions post={post}  />
+          <Actions post={post} />
         </Flex>
       </Flex>
     </Flex>

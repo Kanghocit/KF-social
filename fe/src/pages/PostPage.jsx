@@ -9,7 +9,7 @@ import {
   Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "../components/Actions";
 import Comment from "../components/Comment";
@@ -25,8 +25,7 @@ import postsAtom from "../atoms/postsAtom";
 const PostPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, loading } = useGetUserProfile();
-
-  const [posts, setPosts] =useRecoilState(postsAtom);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const showToast = useShowToast();
   const { pid } = useParams();
   const currentUser = useRecoilValue(userAtom);
@@ -41,7 +40,7 @@ const PostPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
-        console.log(data);
+
         setPosts([data]);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -63,7 +62,7 @@ const PostPage = () => {
           <Avatar src={user?.profilePicture} size={"md"} name="kang15.8" />
           <Flex>
             <Text fontSize={"sm"} fontWeight={"bold"}>
-              {user.username}
+              {user?.username}
             </Text>
             <Image src="/verified.png" w="4" h={4} ml={4} />
           </Flex>
@@ -78,21 +77,21 @@ const PostPage = () => {
           >
             {formatDistanceToNow(new Date(currentPost.createdAt))}
           </Text>
-          {currentUser?._id === user._id && (
-            <PostMenu user={user} post={currentPost} onOpen={onOpen} />
+          {currentUser?._id === user?._id && (
+            <PostMenu user={user} post={posts} onOpen={onOpen} />
           )}
         </Flex>
       </Flex>
-      <Text my={3}>{currentPost.text}</Text>
+      <Text my={3}>{currentPost?.text}</Text>
 
-      {currentPost.img && (
+      {currentPost?.img && (
         <Box
           borderRadius={6}
           overflow={"hidden"}
           border={"1px solid"}
           borderColor={"gray.light"}
         >
-          <Image src={currentPost.img} w={"full"} />
+          <Image src={currentPost?.img} w={"full"} />
         </Box>
       )}
 
@@ -100,31 +99,24 @@ const PostPage = () => {
         <Actions post={currentPost} />
       </Flex>
 
-      {/* <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.replies.length} replies
-        </Text>
-        <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.likes.length} likes
-        </Text>
-      </Flex> */}
-
       <Divider my={4} />
 
       <Flex justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
           <Text fontSize={"2xl"}>💖</Text>
-          <Text color={"gray.light"}>{currentPost.text}</Text>
+          <Text color={"gray.light"}>Get the app to like, reply and post</Text>
         </Flex>
         <Button>Get</Button>
       </Flex>
       <Divider my={4} />
-      {currentPost.replies.map((reply) => (
+      {currentPost?.replies.map((reply) => (
         <Comment
           key={reply._id}
           reply={reply}
-          lastreply={reply._id === currentPost.replies[currentPost.replies.length - 1]._id}
+          lastReply={
+            reply?._id ===
+            currentPost?.replies[currentPost?.replies.length - 1]._id
+          }
         />
       ))}
     </>

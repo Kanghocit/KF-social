@@ -74,7 +74,7 @@ const PostMenu = ({ user, post}) => {
                 return;
             }
             showToast("Success", "Post deleted", "success");
-            setPosts((prev) => prev.filter((p) => p._id !== post._id))
+            navigate(`/${user.username}`)
             
         } catch (error) {
             showToast("Error", error.message, "error");
