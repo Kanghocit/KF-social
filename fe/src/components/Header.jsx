@@ -6,6 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import { FiLogOut } from "react-icons/fi";
 import useLogout from "../hooks/useLogout";
+import { BsFillChatQuoteFill } from "react-icons/bs";
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -32,6 +33,9 @@ const Header = () => {
         <Flex alignItems={"center"} gap={4}>
           <Link as={RouterLink} to={`/${user.username}`}>
             <RxAvatar size={24} />
+          </Link>
+          <Link as={RouterLink} to={"/chat"}>
+            <BsFillChatQuoteFill size={20} />
           </Link>
           <Button size={"xs"} onClick={logout}>
             <FiLogOut size={20} />
