@@ -133,7 +133,7 @@ const replyToPost = async (req, res) => {
     post.replies.push(reply);
     await post.save();
 
-    res.status(200).json( reply );
+    res.status(200).json(reply);
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.log(err);
@@ -182,35 +182,30 @@ const getUserPosts = async (req, res) => {
 // update user post
 const updateUserPost = async (req, res) => {
   const { text, img } = req.body;
-  const postId = req.params.id; // Ensure you're getting the postId from req.params
+  const postId = req.params.id;
 
-  // Check if req.user is populated
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
-    // Find the post by ID
     let post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Verify user authorization to update the post
     if (post.postedBy.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ error: "Unauthorized to update this post" });
     }
 
-    // Ensure at least one field (text or img) is provided for updating
     if (!text && !img) {
       return res.status(400).json({
         error: "At least one of text or image must be provided for the update",
       });
     }
 
-    // Check the text length (if text is provided)
     const maxLength = 500;
     if (text && text.length > maxLength) {
       return res
@@ -218,28 +213,19 @@ const updateUserPost = async (req, res) => {
         .json({ error: `Text must be less than ${maxLength} characters` });
     }
 
-    // Update the image if a new one is provided
     if (img) {
-      // Optional: Delete the old image from Cloudinary if post already has an image
       if (post.img) {
         const oldImageId = post.img.split("/").pop().split(".")[0];
         await cloudinary.uploader.destroy(oldImageId);
       }
 
-      // Upload the new image to Cloudinary
       const uploadedResponse = await cloudinary.uploader.upload(img);
       post.img = uploadedResponse.secure_url;
     }
-
-    // Update the text if provided
     if (text) {
       post.text = text;
     }
-
-    // Save the updated post
     post = await post.save();
-
-    // Return the updated post
     res.status(200).json({ message: "Post updated successfully!", post });
   } catch (error) {
     res.status(500).json({ error: error.message });

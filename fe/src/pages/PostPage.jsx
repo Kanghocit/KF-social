@@ -83,15 +83,15 @@ const PostPage = () => {
         </Flex>
       </Flex>
       <Text my={3}>{currentPost?.text}</Text>
-
       {currentPost?.img && (
-        <Box
-          borderRadius={6}
-          overflow={"hidden"}
-          border={"1px solid"}
-          borderColor={"gray.light"}
-        >
-          <Image src={currentPost?.img} w={"full"} />
+        <Box borderRadius={6} overflow={"hidden"} borderColor={"gray.light"}>
+          <Image
+            src={currentPost?.img}
+            w={"full"}
+            maxHeight={"350px"}
+            width={"auto"}
+            borderRadius={"10px"}
+          />
         </Box>
       )}
 

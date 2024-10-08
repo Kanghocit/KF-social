@@ -40,8 +40,8 @@ export default function UpdateProfilePage() {
     const showToast = useShowToast();
     const navigate = useNavigate(); 
 
-    const comeToHomePage = () => {
-        navigate("/"); 
+    const comeToUserPage = () => {
+        navigate(`/${user.username}`); 
     };
 
     const handleSubmit = async (e) => {
@@ -162,7 +162,7 @@ export default function UpdateProfilePage() {
                             bg={'red.400'}
                             color={'white'}
                             w="full"
-                            onClick={comeToHomePage}
+                            onClick={comeToUserPage}
                             _hover={{
                                 bg: 'red.500',
                             }}>

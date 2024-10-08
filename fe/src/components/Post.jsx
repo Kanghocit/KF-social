@@ -18,7 +18,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
 
-const Post = ({ post, postedBy }) => {
+const Post = ({ post, postedBy}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const showToast = useShowToast();
   const [user, setUser] = useState(null);
@@ -66,7 +66,7 @@ const Post = ({ post, postedBy }) => {
             <Avatar
               size={"xs"}
               name="John"
-              src={post.replies[0].profilePicture}
+              src={post.replies[0].userProfilePicture}
               position={"absolute"}
               top={"0px"}
               left={"15px"}
@@ -77,7 +77,7 @@ const Post = ({ post, postedBy }) => {
             <Avatar
               size={"xs"}
               name="John"
-              src={post.replies[1].profilePicture}
+              src={post.replies[1].userProfilePicture}
               position={"absolute"}
               bottom={"0px"}
               right={"-5px"}
@@ -88,7 +88,7 @@ const Post = ({ post, postedBy }) => {
             <Avatar
               size={"xs"}
               name="John"
-              src={post.replies[2].profilePicture}
+              src={post.replies[2].userProfilePicture}
               position={"absolute"}
               bottom={"0px"}
               left={"4px"}
@@ -126,10 +126,9 @@ const Post = ({ post, postedBy }) => {
             <Box
               borderRadius={"6"}
               overflow={"hidden"}
-              border={"1px solid"}
               borderColor={"gray.light"}
             >
-              <Image src={post.img} w={"full"} maxHeight={"400px"} />
+              <Image src={post.img} w={"full"} maxHeight={"350px"} width={"auto"}/>
             </Box>
           </Link>
         )}
