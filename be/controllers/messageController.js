@@ -41,7 +41,7 @@ async function sendMessage(req, res) {
 }
 async function getMessage(req, res) {
   const { otherUserId } = req.params;
-  const userId  = req.user._id;
+  const userId = req.user._id;
   try {
     const conversation = await Conversation.findOne({
       participants: { $all: [userId, otherUserId] },
@@ -61,15 +61,22 @@ async function getMessage(req, res) {
 }
 
 async function getConversations(req, res) {
-    const userId = req.user._id;
-    try {
-        const conversations =  await Conversation.find({participants: userId}).populate({
-            path: "participants",
-            select: "username profilePicture"
-        })
-        res.status(200).json(conversations)
-    } catch (error) {
-        res.status(500).json({error: error.message})
-    }
+  const userId = req.user._id;
+  try {
+    const conversations = await Conversation.find({
+      participants: userId,
+    }).populate({
+      path: "participants",
+      select: "username profilePicture",
+    });
+    conversations.forEach((conversation) => {
+      conversation.participants = conversation.participants.filter(
+        (participant) => participant._id.toString() !== userId.toString()
+      );
+    });
+    res.status(200).json(conversations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 export { sendMessage, getMessage, getConversations };

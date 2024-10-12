@@ -18,14 +18,14 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
 
-const Post = ({ post, postedBy}) => {
+const Post = ({ post, postedBy }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const showToast = useShowToast();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
   const [posts, setPosts] = useRecoilState(postsAtom);
-  
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -114,9 +114,7 @@ const Post = ({ post, postedBy}) => {
             >
               {formatDistanceToNow(new Date(post.createdAt))}
             </Text>
-            {currentUser?._id === user._id && (
-              <PostMenu user={user} post={post} onOpen={onOpen} />
-            )}
+            <PostMenu user={user} post={post} onOpen={onOpen} />
           </Flex>
         </Flex>
 
@@ -128,7 +126,12 @@ const Post = ({ post, postedBy}) => {
               overflow={"hidden"}
               borderColor={"gray.light"}
             >
-              <Image src={post.img} w={"full"} maxHeight={"350px"} width={"auto"}/>
+              <Image
+                src={post.img}
+                w={"full"}
+                maxHeight={"350px"}
+                width={"auto"}
+              />
             </Box>
           </Link>
         )}

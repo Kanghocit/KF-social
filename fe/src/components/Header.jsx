@@ -1,45 +1,33 @@
-import { Button, Flex, Image, Link, useColorMode } from "@chakra-ui/react";
+import { Flex, Link, Avatar } from "@chakra-ui/react";
+import { RxAvatar } from "react-icons/rx";
+import { Link as RouterLink } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import { AiFillHome } from "react-icons/ai";
-import { Link as RouterLink } from "react-router-dom";
-import { RxAvatar } from "react-icons/rx";
-import { FiLogOut } from "react-icons/fi";
-import useLogout from "../hooks/useLogout";
-import { BsFillChatQuoteFill } from "react-icons/bs";
 
 const Header = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
   const user = useRecoilValue(userAtom);
-  const logout = useLogout();
+  console.log("user", user);
   return (
-    <Flex justifyContent={"space-between"} mt={6} mb="12">
+    <Flex
+      position="fixed"
+      top={0}
+      left={100}
+      width="full"
+      
+      zIndex={1000}
+      justifyContent={"flex-end"}
+      mt={0}
+      mb={4}
+      p={4}
+    >
       {user && (
-        <Link as={RouterLink} to="/">
-          <AiFillHome size={24} />
-        </Link>
-      )}
-
-      <Image
-        mx={"auto"}
-        cursor={"pointer"}
-        alt="logo"
-        w={6}
-        src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
-        onClick={toggleColorMode}
-      />
-
-      {user && (
-        <Flex alignItems={"center"} gap={4}>
+        <Flex mr={"100px"}>
           <Link as={RouterLink} to={`/${user.username}`}>
-            <RxAvatar size={24} />
+            <Avatar
+              size={{ base: "xs", sm: "sm", md: "md" }}
+              src={user.profilePicture}
+            ></Avatar>
           </Link>
-          <Link as={RouterLink} to={"/chat"}>
-            <BsFillChatQuoteFill size={20} />
-          </Link>
-          <Button size={"xs"} onClick={logout}>
-            <FiLogOut size={20} />
-          </Button>
         </Flex>
       )}
     </Flex>
