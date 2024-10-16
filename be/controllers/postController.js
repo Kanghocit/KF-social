@@ -139,6 +139,27 @@ const replyToPost = async (req, res) => {
     console.log(err);
   }
 };
+// delete replypost 
+const deleteReplyPost = async(req, res) => {
+  try {
+    const postId = req.params.id;
+    const replyId = req.body;
+    const post = await Post.findById(postId);
+    if(!post){
+      return  res.status(400).json({error: "Post not found!"})
+    }
+    const reply = post.replies.findIndex( reply => reply._id.toString() === replyId)
+    if(reply === -1){
+      return res.status(404).json({error: "Reply not found!"})
+    }
+    const deleteReply = post.replies.splice(reply,1);
+    await post.save();
+    res.status(200).json(deleteReply);
+
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+}
 
 //get feed post
 const getFeedPosts = async (req, res) => {
@@ -242,4 +263,5 @@ export {
   getFeedPosts,
   getUserPosts,
   updateUserPost,
+  deleteReplyPost,
 };

@@ -59,7 +59,23 @@ async function getMessage(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-
+async function deleteMessage(req, res) {
+  try {
+    const deleteId = req.params.id;
+    const userId = req.user._id;
+    const mes = await Message.findById(deleteId);
+    if (!mes) {
+      return res.status(404).json({ error: "Message not found!" });
+    }
+    if (mes.sender.toString() !== userId.toString()) {
+      res.status(401).json({ error: "Unauthorized to delete message" });
+    }
+    await Message.findByIdAndDelete(deleteId);
+    res.status(200).json({ message: "Message deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.messgae });
+  }
+}
 async function getConversations(req, res) {
   const userId = req.user._id;
   try {
@@ -79,4 +95,4 @@ async function getConversations(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-export { sendMessage, getMessage, getConversations };
+export { sendMessage, getMessage, deleteMessage, getConversations };
