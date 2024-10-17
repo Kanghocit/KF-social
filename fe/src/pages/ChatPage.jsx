@@ -185,23 +185,19 @@ const ChatPage = () => {
               </Flex>
             ))}
 
-{console.log("người đang đăng nhập",currentUser._id)}
-
-{!loadingConversations &&
-  conversations
-    .filter(conversation => {
-      console.log("người tham gia", conversation.participants);
-      return conversation.participants.some(participant => participant._id === currentUser._id);
-    })
-    .map(conversation => (
-      <Conversation
-        key={conversation._id}
-        conversation={conversation}
-      />
-    ))
-}
-
-
+          {!loadingConversations &&
+            conversations
+              .filter((conversation) => {
+                return conversation.participants.some(
+                  (participant) => participant._id === currentUser._id
+                );
+              })
+              .map((conversation) => (
+                <Conversation
+                  key={conversation._id}
+                  conversation={conversation}
+                />
+              ))}
         </Flex>
         {!selectedConversation._id && (
           <Flex
