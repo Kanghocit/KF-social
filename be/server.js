@@ -6,13 +6,14 @@ import userRoutes from "./routers/userRoutes.js";
 import postRoutes from "./routers/postRoutes.js";
 import messageRoutes from "./routers/messageRoutes.js";
 import { v2 as cloudinary } from "cloudinary";
+import {app, server} from './socket/socket.js'
 
 dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
-const app = express();
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -32,6 +33,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
 });
