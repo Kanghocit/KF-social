@@ -96,8 +96,8 @@ const ChatPage = () => {
           },
         ],
       };
-      setSearchText("")
-      if(!conversationAlreadyExists){
+      setSearchText("");
+      if (!conversationAlreadyExists) {
         setConversations((prevConns) => [...prevConns, mockConversation]);
       }
     } catch (error) {
@@ -185,13 +185,23 @@ const ChatPage = () => {
               </Flex>
             ))}
 
-          {!loadingConversations &&
-            conversations.map((conversation) => (
-              <Conversation
-                key={conversation._id}
-                conversation={conversation}
-              />
-            ))}
+{console.log("người đang đăng nhập",currentUser._id)}
+
+{!loadingConversations &&
+  conversations
+    .filter(conversation => {
+      console.log("người tham gia", conversation.participants);
+      return conversation.participants.some(participant => participant._id === currentUser._id);
+    })
+    .map(conversation => (
+      <Conversation
+        key={conversation._id}
+        conversation={conversation}
+      />
+    ))
+}
+
+
         </Flex>
         {!selectedConversation._id && (
           <Flex

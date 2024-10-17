@@ -19,6 +19,7 @@ const Conversations = ({ conversation }) => {
   const user = conversation.participants[0];
   const colorMode = useColorMode();
   const currentUser = useRecoilValue(userAtom);
+  const otherUser = conversation.participants.find(p => p._id !== currentUser._id);
   const lastMessage = conversation.lastMessage;
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
@@ -37,9 +38,9 @@ const Conversations = ({ conversation }) => {
       onClick={() =>
         setSelectedConversation({
           _id: conversation._id,
-          userId: user._id,
-          userProfilePicture: user.profilePicture,
-          username: user.username,
+          userId: otherUser._id,
+          userProfilePicture: otherUser.profilePicture,
+          username: otherUser.username,
           mock: conversation.mock,
         })
       }
@@ -55,19 +56,19 @@ const Conversations = ({ conversation }) => {
       <WrapItem>
         <Avatar
           size={{ base: "xs", sm: "sm", md: "md" }}
-          src={user.profilePicture}
+          src={otherUser.profilePicture}
         >
           <AvatarBadge boxSize={"1em"} bg={"green.500"} />
         </Avatar>
       </WrapItem>
       <Stack direction={"column"} fontSize={"sm"}>
         <Text fontWeight={"700"} display={"flex"} alignItems={"center"}>
-          {user.username}
+          {otherUser.username}
           <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
         <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
           {currentUser._id === lastMessage.sender ? (
-            <BsCheck2All size={16} />
+            <BsCheck2All size={16} /> 
           ) : (
             ""
           )}

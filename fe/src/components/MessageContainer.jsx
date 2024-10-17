@@ -15,38 +15,16 @@ import useShowToast from "../hooks/useShowToast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedConversationAtom } from "../atoms/messageAtom";
 import userAtom from "../atoms/userAtom";
+import useFetchMessages from "../hooks/useFetchMessage.js"
 
 const MessageContainer = () => {
   const showToast = useShowToast();
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
-  const [loadingMessages, setLoadingMessages] = useState(true);
-  const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
 
-  useEffect(() => {
-    const getMessages = async () => {
-      setLoadingMessages(true);
-      setMessages([]);
-      try {
-        if(selectedConversation.mock) return;
-        const res = await fetch(`/api/messages/${selectedConversation.userId}`);
-        const data = await res.json();
-        if (data.error) {
-          showToast("Error", data.error, "error");
-          return;
-        }
-        setMessages(data);
-        // console.log("data",data)
-      } catch (error) {
-        showToast("Error", error.message, "error");
-      } finally {
-        setLoadingMessages(false);
-      }
-    };
-    getMessages();
-  }, [showToast, selectedConversation.userId]);
+  const { loadingMessages, messages, setMessages, getMessages } = useFetchMessages();
   return (
     <Flex
       flex={70}
@@ -99,6 +77,7 @@ const MessageContainer = () => {
               key={message._id}
               message={message}
               ownMessage={currentUser._id === message.sender}
+              getMessages={getMessages}
             />
           ))}
       </Flex>

@@ -85,14 +85,12 @@ async function getConversations(req, res) {
       path: "participants",
       select: "username profilePicture",
     });
-    conversations.forEach((conversation) => {
-      conversation.participants = conversation.participants.filter(
-        (participant) => participant._id.toString() !== userId.toString()
-      );
-    });
+
+    // Lọc ra người dùng hiện tại từ danh sách participants
     res.status(200).json(conversations);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
+
 export { sendMessage, getMessage, deleteMessage, getConversations };
