@@ -5,30 +5,29 @@ import {
   Image,
   Stack,
   Text,
-  useColorMode,
   useColorModeValue,
-  WrapItem,
+  WrapItem
 } from "@chakra-ui/react";
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
 import { BsCheck2All } from "react-icons/bs";
-import { conversationsAtom, selectedConversationAtom } from "../atoms/messageAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  selectedConversationAtom
+} from "../atoms/messageAtom";
+import userAtom from "../atoms/userAtom";
 
-const Conversations = ({ conversation }) => {
-  console.log("chà",conversation)
-  const [conversations, setConversations] = useRecoilState(conversationsAtom);
-  console.log("chà pro", conversations)
+const Conversations = ({ conversation, isOnline }) => {
+  console.log(isOnline)
 
   const currentUser = useRecoilValue(userAtom);
-  const otherUser = conversation.participants.find(p => p._id !== currentUser._id);
+  const otherUser = conversation.participants.find(
+    (p) => p._id !== currentUser._id
+  );
   const lastMessage = conversation.lastMessage || {}; // Sử dụng optional chaining
 
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
-  console.log("chà pro max", conversations)
-  
 
   return (
     <Flex
@@ -61,7 +60,7 @@ const Conversations = ({ conversation }) => {
           size={{ base: "xs", sm: "sm", md: "md" }}
           src={otherUser?.profilePicture} // Sử dụng optional chaining
         >
-          <AvatarBadge boxSize={"1em"} bg={"green.500"} />
+          {isOnline ? <AvatarBadge boxSize={"1em"} bg={"green.500"} /> : ""}
         </Avatar>
       </WrapItem>
       <Stack direction={"column"} fontSize={"sm"}>

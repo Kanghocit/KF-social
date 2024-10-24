@@ -6,7 +6,6 @@ import userAtom from "../atoms/userAtom";
 
 const Header = () => {
   const user = useRecoilValue(userAtom);
-  console.log("user", user);
   return (
     <Flex
       position="fixed"

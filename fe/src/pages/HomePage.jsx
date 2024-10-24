@@ -1,41 +1,39 @@
-import { Flex, Spinner } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-
-import useShowToast from "../hooks/useShowToast"
-import Post from "../components/Post"
-import { useRecoilState } from "recoil"
-import postsAtom from "../atoms/postsAtom"
-
+import { Flex, Spinner } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import useShowToast from "../hooks/useShowToast";
+import Post from "../components/Post";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
 
 const HomePage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom);
   const [loading, setLoading] = useState(false);
-
-
-
+  
   const showToast = useShowToast();
-  useEffect(() => {
 
+  useEffect(() => {
     const getFeedPosts = async () => {
       setLoading(true);
-      setPosts([]);
+      setPosts([]); 
       try {
         const res = await fetch("/api/posts/feed");
         const data = await res.json();
         if (data.error) {
-          showToast("Error", error.message, "error");
+          showToast("Error", data.error.message, "error"); 
           return;
         }
         console.log(data);
-        setPosts(data);
+        setPosts(Array.from(data)); 
       } catch (error) {
         showToast("Error", error.message, "error");
       } finally {
         setLoading(false);
       }
     };
+
     getFeedPosts();
-  }, [showToast, setPosts])
+  }, [showToast, setPosts]);
+
   return (
     <>
       {!loading && posts.length === 0 && <h1>Follow some users to see the feed</h1>}
@@ -44,12 +42,11 @@ const HomePage = () => {
           <Spinner size={"xl"} />
         </Flex>
       )}
-
       {posts.map((post) => (
         <Post key={post._id} post={post} postedBy={post.postedBy} />
       ))}
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

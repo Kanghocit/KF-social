@@ -39,12 +39,10 @@ const Message = ({ ownMessage, message, getMessages }) => {
         return;
       }
   
-      // Cập nhật danh sách tin nhắn
       const updatedMessages = messages.filter((p) => p._id !== message._id);
       setMessages(updatedMessages);
       showToast("Success", "Message deleted", "success");
   
-      // Cập nhật lastMessage cho cuộc trò chuyện
       if (updatedMessages.length > 0) {
         const lastMessage = updatedMessages[updatedMessages.length - 1];
         setConversations((prevConvs) => {
@@ -62,7 +60,6 @@ const Message = ({ ownMessage, message, getMessages }) => {
           });
         });
       } else {
-        // Nếu không còn tin nhắn nào, có thể set lastMessage là null hoặc một giá trị mặc định
         setConversations((prevConvs) => {
           return prevConvs.map((conversation) => {
             if (conversation._id === selectedConversation._id) {
