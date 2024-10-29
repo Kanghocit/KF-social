@@ -36,7 +36,7 @@ const ChatPage = () => {
   // const otherUser = conversations.participants.find((p) =>p._id !== onlineUsers)
 
   useEffect(() => {
-    socket?.on("messageSeen", ({ conversationId }) => {
+    socket?.on("messagesSeen", ({ conversationId }) => {
       setConversations((prev) => {
         const updatedConversations = prev.map((conversation) => {
           if ((conversation._id = conversationId)) {

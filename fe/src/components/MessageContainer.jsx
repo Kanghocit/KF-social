@@ -28,48 +28,51 @@ const MessageContainer = () => {
   const selectedConversation = useRecoilValue(selectedConversationAtom);
   const currentUser = useRecoilValue(userAtom);
 
-  const { loadingMessages, messages, setMessages, getMessages } =
-    useFetchMessages();
+  const { loadingMessages, messages, setMessages, getMessages } = useFetchMessages();
   const setConversations = useSetRecoilState(conversationsAtom);
   const messageEndRef = useRef(null);
 
   useEffect(() => {
     const lastMessageIsFromOtherUser =
-      messages[messages.length - 1].sender !== currentUser._id;
+      messages.length > 0 && messages[messages.length - 1].sender !== currentUser._id;
+
     if (lastMessageIsFromOtherUser) {
       socket.emit("markMessagesAsSeen", {
         conversationId: selectedConversation._id,
         userId: selectedConversation.userId,
       });
     }
-    socket.on("messagesSeen", ({conversationId}) => {
-       if(selectedConversation._id === conversationId){
-        setMessages(prev => {
-          const updatedMessages = prev.map(message => {
-            if(!message.seen) {
-              return {
-                ...message,
-                seen: true,
-              }
-            }
-            return true
-          })
-          return updatedMessages
-        })
-       }
-    })
-  }, [socket, currentUser._id,messages, selectedConversation]);
+
+    const messagesSeenHandler = ({ conversationId }) => {
+      if (selectedConversation._id === conversationId) {
+        setMessages((prev) =>
+          prev.map((message) => ({
+            ...message,
+            seen: message.seen || true,
+          }))
+        );
+      }
+    };
+
+    socket.on("messagesSeen", messagesSeenHandler);
+
+    return () => {
+      socket.off("messagesSeen", messagesSeenHandler);
+    };
+  }, [socket, currentUser._id, messages, selectedConversation, setMessages]);
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    socket.on("newMessage", (message) => {
+    const newMessageHandler = (message) => {
       if (selectedConversation._id === message.conversationId) {
         setMessages((prevMessage) => [...prevMessage, message]);
       }
+
       setConversations((prev) => {
-        const updatedConversations = prev.map((conversation) => {
+        return prev.map((conversation) => {
           if (conversation._id === message.conversationId) {
             return {
               ...conversation,
@@ -81,11 +84,14 @@ const MessageContainer = () => {
           }
           return conversation;
         });
-        return updatedConversations;
       });
-    });
-    return () => socket.off("newMessage");
+    };
+
+    socket.on("newMessage", newMessageHandler);
+
+    return () => socket.off("newMessage", newMessageHandler);
   }, [socket, selectedConversation, setConversations]);
+
   return (
     <Flex
       flex={70}
@@ -94,7 +100,7 @@ const MessageContainer = () => {
       borderRadius={"md"}
       flexDirection={"column"}
     >
-      {/* message header */}
+      {/* Message Header */}
       <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
         <Avatar src={selectedConversation.userProfilePicture} size={"sm"} />
         <Text display={"flex"} alignItems={"center"}>
@@ -144,7 +150,6 @@ const MessageContainer = () => {
               direction={"column"}
             >
               <Message
-                key={message._id}
                 message={message}
                 ownMessage={currentUser._id === message.sender}
                 getMessages={getMessages}

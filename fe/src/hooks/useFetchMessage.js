@@ -6,7 +6,7 @@ import useShowToast from "./useShowToast";
 const useFetchMessages = () => {
   const showToast = useShowToast();
   const [loadingMessages, setLoadingMessages] = useState(true);
-  const [messages, setMessages] = useRecoilState(messagesAtom); // Recoil to manage messages
+  const [messages, setMessages] = useRecoilState(messagesAtom); 
   const selectedConversation = useRecoilValue(selectedConversationAtom);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const useFetchMessages = () => {
     showToast,
     selectedConversation.userId,
     selectedConversation.mock,
-    setMessages,
+    
   ]);
 
   return { loadingMessages, messages, setMessages };

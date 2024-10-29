@@ -23,7 +23,7 @@ const Conversations = ({ conversation, isOnline }) => {
   const otherUser = conversation.participants.find(
     (p) => p._id !== currentUser._id
   );
-  const lastMessage = conversation.lastMessage || {}; // Sử dụng optional chaining
+  const lastMessage = conversation.lastMessage || {}; 
 
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
