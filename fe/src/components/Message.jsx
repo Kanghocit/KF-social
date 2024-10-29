@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Flex,
   Popover,
@@ -17,9 +18,11 @@ import {
 } from "../atoms/messageAtom";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
+import {BsCheck2All} from 'react-icons/bs'
 
-const Message = ({ ownMessage, message, getMessages }) => { 
-  const [messages, setMessages] = useRecoilState(messagesAtom); 
+const Message = ({ ownMessage, message, getMessages }) => {
+  console.log("khang ", message)
+  const [messages, setMessages] = useRecoilState(messagesAtom);
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom);
   const selectedConversation = useRecoilValue(selectedConversationAtom);
@@ -29,7 +32,7 @@ const Message = ({ ownMessage, message, getMessages }) => {
     try {
       if (!window.confirm("Are you sure you want to delete this message!"))
         return;
-  
+
       const res = await fetch(`/api/messages/${message._id}`, {
         method: "DELETE",
       });
@@ -38,11 +41,11 @@ const Message = ({ ownMessage, message, getMessages }) => {
         showToast("Error", data.error, "error");
         return;
       }
-  
+
       const updatedMessages = messages.filter((p) => p._id !== message._id);
       setMessages(updatedMessages);
       showToast("Success", "Message deleted", "success");
-  
+
       if (updatedMessages.length > 0) {
         const lastMessage = updatedMessages[updatedMessages.length - 1];
         setConversations((prevConvs) => {
@@ -65,15 +68,15 @@ const Message = ({ ownMessage, message, getMessages }) => {
             if (conversation._id === selectedConversation._id) {
               return {
                 ...conversation,
-                lastMessage: null, // hoặc giá trị mặc định khác
+                lastMessage: null, 
               };
             }
             return conversation;
           });
         });
       }
-  
-      getMessages(); 
+
+      getMessages();
     } catch (error) {
       // showToast("Error", error.message, "error");
     }
@@ -96,15 +99,18 @@ const Message = ({ ownMessage, message, getMessages }) => {
                 px={2}
                 py={1}
                 w={"fit-content"}
-                onClick={deleteMessClick} 
+                onClick={deleteMessClick}
               >
                 <FaRegTrashCan />
               </Button>
             </PopoverContent>
           </Popover>
-          <Text maxW={"350px"} bg={"blue.400"} p={1} borderRadius={"md"}>
-            {message.text}
-          </Text>
+          <Flex bg={"green.800"} maxW={"350px"} p={1} borderRadius={"md"}>
+            <Text color={"white"}>{message.text}</Text>
+            <Box alignSelf={"flex-end"} ml={1} color={message?.seen ? "blue.400" : ""} fontWeight={"bold"}>
+              <BsCheck2All size={16}/>
+            </Box>
+          </Flex>
           <Avatar src={currentUser.profilePicture} w={7} h={7} />{" "}
           {/* Use currentUser */}
         </Flex>

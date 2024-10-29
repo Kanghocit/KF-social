@@ -13,6 +13,7 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const user = useRecoilValue(userAtom);
+  
 
   useEffect(() => {
     const socket = io("http://localhost:8080", {

@@ -36,6 +36,26 @@ const ChatPage = () => {
   // const otherUser = conversations.participants.find((p) =>p._id !== onlineUsers)
 
   useEffect(() => {
+    socket?.on("messageSeen", ({ conversationId }) => {
+      setConversations((prev) => {
+        const updatedConversations = prev.map((conversation) => {
+          if ((conversation._id = conversationId)) {
+            return {
+              ...conversation,
+              lastMessage: {
+                ...conversation.lastMessage,
+                seen: true,
+              },
+            };
+          }
+          return conversation;
+        });
+        return updatedConversations;
+      });
+    });
+  }, [socket, setConversations]);
+
+  useEffect(() => {
     const getConversation = async () => {
       try {
         const res = await fetch("/api/messages/conversations");
@@ -199,8 +219,10 @@ const ChatPage = () => {
                 <Conversation
                   key={conversation._id}
                   isOnline={conversation.participants.some(
-                    (participant) => participant._id !== currentUser._id && onlineUsers.includes(participant._id)
-                  )}                  
+                    (participant) =>
+                      participant._id !== currentUser._id &&
+                      onlineUsers.includes(participant._id)
+                  )}
                   conversation={conversation}
                 />
               ))}

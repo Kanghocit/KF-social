@@ -6,5 +6,5 @@
 ### B2: add file .env vào be
 ### B3: Chạy 2 song song 2 terminal với câu lệnh 
 #cd fe và cd be
-### B4: ở 2 file chạy đồng thời câu lệnh 
+### B4: ở 2 bên chạy đồng thời câu lệnh 
 #npm run dev

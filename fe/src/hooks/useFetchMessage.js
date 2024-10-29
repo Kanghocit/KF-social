@@ -29,7 +29,12 @@ const useFetchMessages = () => {
       }
     };
     getMessages();
-  }, [selectedConversation.userId, setMessages, showToast]);
+  }, [
+    showToast,
+    selectedConversation.userId,
+    selectedConversation.mock,
+    setMessages,
+  ]);
 
   return { loadingMessages, messages, setMessages };
 };
