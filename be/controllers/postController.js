@@ -169,7 +169,7 @@ const getFeedPosts = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
-    const following = user.followings;
+    const following = user.following;
 
     const feedPosts = await Post.find({ postedBy: { $in: following } }).sort({
       createdAt: -1,

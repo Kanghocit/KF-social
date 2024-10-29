@@ -105,17 +105,17 @@ const followUnFollowUser = async (req, res) => {
     //     currentUser.followings = [];
     // }
 
-    const isFollowing = currentUser.followings.includes(id);
+    const isFollowing = currentUser.following.includes(id);
 
     if (isFollowing) {
       // Unfollow user
       await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
-      await User.findByIdAndUpdate(req.user._id, { $pull: { followings: id } });
+      await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
       res.status(200).json({ message: "User unfollowed successfully" });
     } else {
       // Follow user
       await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
-      await User.findByIdAndUpdate(req.user._id, { $push: { followings: id } });
+      await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
       res.status(200).json({ message: "User followed successfully" });
     }
   } catch (err) {
@@ -209,6 +209,35 @@ const getUserProfile = async (req, res) => {
     console.log("Can't be get your userProfile!!", err);
   }
 };
+const getSuggestedUsers = async (req, res) => {
+  try {
+    // exclude the current user from suggested users array and exclude users that current user is already following
+    const userId = req.user._id;
+
+    const usersFollowedByYou = await User.findById(userId).select("following");
+
+    const users = await User.aggregate([
+      {
+        $match: {
+          _id: { $ne: userId },
+        },
+      },
+      {
+        $sample: { size: 10 },
+      },
+    ]);
+    const filteredUsers = users.filter(
+      (user) => !usersFollowedByYou.following.includes(user._id)
+    );
+    const suggestedUsers = filteredUsers.slice(0, 4);
+
+    suggestedUsers.forEach((user) => (user.password = null));
+
+    res.status(200).json(suggestedUsers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export {
   signupUser,
@@ -217,4 +246,5 @@ export {
   followUnFollowUser,
   updateUser,
   getUserProfile,
+  getSuggestedUsers,
 };

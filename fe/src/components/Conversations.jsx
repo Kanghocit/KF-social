@@ -6,24 +6,23 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  WrapItem
+  WrapItem,
 } from "@chakra-ui/react";
 import React from "react";
-import { BsCheck2All } from "react-icons/bs";
+import { BsCheck2All, BsFillImageFill } from "react-icons/bs";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  selectedConversationAtom
-} from "../atoms/messageAtom";
+import { selectedConversationAtom } from "../atoms/messageAtom";
 import userAtom from "../atoms/userAtom";
 
 const Conversations = ({ conversation, isOnline }) => {
-  console.log(isOnline)
+  console.log(isOnline);
 
   const currentUser = useRecoilValue(userAtom);
   const otherUser = conversation.participants.find(
     (p) => p._id !== currentUser._id
   );
-  const lastMessage = conversation.lastMessage || {}; 
+  const lastMessage = conversation.lastMessage ;
+  console.log("hii", lastMessage)
 
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
@@ -70,15 +69,15 @@ const Conversations = ({ conversation, isOnline }) => {
         </Text>
         {lastMessage?.text && ( // Kiểm tra tồn tại tin nhắn
           <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
-            {currentUser._id === lastMessage.sender ? (
-              <BsCheck2All size={16} />
-            ) : (
-              ""
-            )}
-            {lastMessage.text.length > 18
-              ? lastMessage.text.substring(0, 18) + "...."
-              : lastMessage.text}
-          </Text>
+          {currentUser._id === lastMessage.sender && <BsCheck2All size={16} />}
+          
+          {/* Check for text or show BsFillImageFill when text is empty */}
+          {lastMessage?.text
+            ? (lastMessage.text.length > 18
+                ? lastMessage.text.substring(0, 18) + "..."
+                : lastMessage.text)
+            : <BsFillImageFill size={20} />}
+        </Text>
         )}
       </Stack>
     </Flex>

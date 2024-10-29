@@ -15,6 +15,8 @@ import { GiConversation } from "react-icons/gi";
 import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useMediaQuery } from "@chakra-ui/react";
+
 import {
   conversationsAtom,
   selectedConversationAtom,
@@ -33,6 +35,7 @@ const ChatPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const { socket, onlineUsers } = useSocket();
+  const [isLargerThan50Percent] = useMediaQuery("(min-width: 50rem)"); // Điều chỉnh giá trị "50rem" thành giá trị cụ thể theo yêu cầu
   // const otherUser = conversations.participants.find((p) =>p._id !== onlineUsers)
 
   useEffect(() => {
@@ -154,79 +157,80 @@ const ChatPage = () => {
         }}
         mx={"auto"}
       >
-        <Flex
-          flex={30}
-          gap={2}
-          flexDirection={"column"}
-          maxW={{
-            sm: "250px",
-            mx: "auto",
-          }}
-          mx={"auto"}
-        >
-          <Text
-            fontWeight={700}
-            color={useColorModeValue("gray.600", "gray.400")}
+        {isLargerThan50Percent && (
+          <Flex
+            flex={30}
+            gap={2}
+            flexDirection={"column"}
+            maxW={{
+              sm: "250px",
+              mx: "auto",
+            }}
+            mx={"auto"}
           >
-            {" "}
-            Your conversations
-          </Text>
-          <form onSubmit={handleConversationSearch}>
-            <Flex alignItems={"center"} gap={2}>
-              <Input
-                placeholder="Search for a user"
-                onChange={(e) => setSearchText(e.target.value)}
-                value={searchText}
-              />
-              <Button
-                size={"sm"}
-                onClick={handleConversationSearch}
-                isLoading={searchingUser}
-              >
-                {" "}
-                <SearchIcon />{" "}
-              </Button>
-            </Flex>
-          </form>
-
-          {loadingConversations &&
-            [0, 1, 2, 3, 4].map((_, i) => (
-              <Flex
-                key={i}
-                gap={4}
-                alignItems={"center"}
-                p={"1"}
-                borderRadius={"md"}
-              >
-                <Box>
-                  <SkeletonCircle size={10} />
-                </Box>
-                <Flex w={"full"} flexDirection={"column"} gap={3}>
-                  <Skeleton h={"10px"} w={"80px"} />
-                  <Skeleton h={"8px"} w={"90%"} />
-                </Flex>
-              </Flex>
-            ))}
-
-          {!loadingConversations &&
-            conversations
-              .filter((conversation) => {
-                return conversation.participants.some(
-                  (participant) => participant._id === currentUser._id
-                );
-              })
-              .map((conversation) => (
-                <Conversation
-                  key={conversation._id}
-                  isOnline={conversation.participants.some(
-                    (participant) =>
-                      participant._id !== currentUser._id &&
-                      onlineUsers.includes(participant._id)
-                  )}
-                  conversation={conversation}
+            <Text
+              fontWeight={700}
+              color={useColorModeValue("gray.600", "gray.400")}
+            >
+              Your conversations
+            </Text>
+            <form onSubmit={handleConversationSearch}>
+              <Flex alignItems={"center"} gap={2}>
+                <Input
+                  placeholder="Search for a user"
+                  onChange={(e) => setSearchText(e.target.value)}
+                  value={searchText}
                 />
+                <Button
+                  size={"sm"}
+                  onClick={handleConversationSearch}
+                  isLoading={searchingUser}
+                >
+                  <SearchIcon />
+                </Button>
+              </Flex>
+            </form>
+
+            {loadingConversations &&
+              [0, 1, 2, 3, 4].map((_, i) => (
+                <Flex
+                  key={i}
+                  gap={4}
+                  alignItems={"center"}
+                  p={"1"}
+                  borderRadius={"md"}
+                >
+                  <Box>
+                    <SkeletonCircle size={10} />
+                  </Box>
+                  <Flex w={"full"} flexDirection={"column"} gap={3}>
+                    <Skeleton h={"10px"} w={"80px"} />
+                    <Skeleton h={"8px"} w={"90%"} />
+                  </Flex>
+                </Flex>
               ))}
-        </Flex>
+
+            {!loadingConversations &&
+              conversations
+                .filter((conversation) => {
+                  return conversation.participants.some(
+                    (participant) => participant._id === currentUser._id
+                  );
+                })
+                .map((conversation) => (
+                  <Conversation
+                    key={conversation._id}
+                    isOnline={conversation.participants.some(
+                      (participant) =>
+                        participant._id !== currentUser._id &&
+                        onlineUsers.includes(participant._id)
+                    )}
+                    conversation={conversation}
+                  />
+                ))}
+          </Flex>
+        )}
+
         {!selectedConversation._id && (
           <Flex
             flex={70}

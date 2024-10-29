@@ -1,29 +1,30 @@
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import Post from "../components/Post";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
+import SuggestedUsers from "../components/SuggestedUsers";
 
 const HomePage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom);
   const [loading, setLoading] = useState(false);
-  
+
   const showToast = useShowToast();
 
   useEffect(() => {
     const getFeedPosts = async () => {
       setLoading(true);
-      setPosts([]); 
+      setPosts([]);
       try {
         const res = await fetch("/api/posts/feed");
         const data = await res.json();
         if (data.error) {
-          showToast("Error", data.error.message, "error"); 
+          showToast("Error", data.error.message, "error");
           return;
         }
         console.log(data);
-        setPosts(Array.from(data)); 
+        setPosts(Array.from(data));
       } catch (error) {
         showToast("Error", error.message, "error");
       } finally {
@@ -36,15 +37,24 @@ const HomePage = () => {
 
   return (
     <>
-      {!loading && posts.length === 0 && <h1>Follow some users to see the feed</h1>}
-      {loading && (
-        <Flex justify={"center"}>
-          <Spinner size={"xl"} />
-        </Flex>
-      )}
-      {posts.map((post) => (
-        <Post key={post._id} post={post} postedBy={post.postedBy} />
-      ))}
+      <Flex gap={10} alignItems={"flex-start"}>
+        <Box flex={80}>
+          {!loading && posts.length === 0 && (
+            <h1>Follow some users to see the feed</h1>
+          )}
+          {loading && (
+            <Flex justify={"center"}>
+              <Spinner size={"xl"} />
+            </Flex>
+          )}
+          {posts.map((post) => (
+            <Post key={post._id} post={post} postedBy={post.postedBy} />
+          ))}
+        </Box>
+        <Box flex={20} >
+          <SuggestedUsers />
+        </Box>
+      </Flex>
     </>
   );
 };

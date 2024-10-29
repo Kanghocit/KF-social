@@ -1,5 +1,5 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import PostPage from "./pages/PostPage";
 import UserPage from "./pages/UserPage";
 import Header from "./components/Header";
@@ -15,7 +15,7 @@ import LeftSideBar from "./components/LeftSideBar";
 
 function App() {
   const user = useRecoilValue(userAtom);
-  console.log(user);
+  const {pathname} = useLocation();
 
   return (
     <Flex position="relative" w="full" minH="100vh">
@@ -25,7 +25,7 @@ function App() {
       </Box>
 
       {/* Main content */}
-      <Container maxW="620px" ml="200px"  mt="64px">
+      <Container maxW={pathname === "/" ? { base: "620px", md: "900px" } : "620px"} ml="200px"  mt="64px">
         <Header />
         <Routes>
           <Route
