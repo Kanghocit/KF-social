@@ -12,6 +12,7 @@ import UpdateProfilePage from "./pages/UpdateProfilePage";
 import CreatePost from "./components/CreatePost";
 import ChatPage from "./pages/ChatPage";
 import LeftSideBar from "./components/LeftSideBar";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   const user = useRecoilValue(userAtom);
@@ -53,6 +54,7 @@ function App() {
               )
             }
           />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/:username/post/:pid" element={<PostPage />} />
           <Route
             path="/chat"

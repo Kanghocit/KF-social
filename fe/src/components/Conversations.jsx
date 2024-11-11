@@ -71,7 +71,7 @@ const Conversations = ({ conversation, isOnline }) => {
           <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
           {currentUser._id === lastMessage.sender && <BsCheck2All size={16} />}
           
-          {/* Check for text or show BsFillImageFill when text is empty */}
+          
           {lastMessage?.text
             ? (lastMessage.text.length > 18
                 ? lastMessage.text.substring(0, 18) + "..."

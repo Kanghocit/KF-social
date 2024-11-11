@@ -43,17 +43,17 @@ const UserHeader = ({ user }) => {
 					</Flex>
 				</Box>
 				<Box>
-					{user.profilePic && (
+					{user.profilePicture && (
 						<Avatar
 							name={user.name}
-							src={user.profilePic}
+							src={user.profilePicture}
 							size={{
 								base: "md",
 								md: "xl",
 							}}
 						/>
 					)}
-					{!user.profilePic && (
+					{!user.profilePicture && (
 						<Avatar
 							name={user.name}
 							src='https://bit.ly/broken-link'

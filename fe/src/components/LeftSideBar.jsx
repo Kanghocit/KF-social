@@ -14,6 +14,7 @@ import { Link, Link as RouterLink } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useLogout from "../hooks/useLogout";
+import { IoSearch } from "react-icons/io5";
 
 const LeftSideBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,6 +51,11 @@ const LeftSideBar = () => {
           <Button {...bg}>
             <Link as={RouterLink} to="/">
               <AiFillHome size={26} />
+            </Link>
+          </Button>
+          <Button {...bg}>
+            <Link as={RouterLink} to="/search">
+              <IoSearch size={26} />
             </Link>
           </Button>
           <Button onClick={onOpen} {...bg}>
