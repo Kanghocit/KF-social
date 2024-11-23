@@ -1,4 +1,4 @@
-# Welcome to Khang"s first project 
+# Welcome to Khang's project 
 
 ## Để có thể chạy được file này sau khi clone về 
 ### B1: tải node_modules bằng câu lệnh 
