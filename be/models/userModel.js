@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -8,7 +7,7 @@ const userSchema = mongoose.Schema(
     },
     username: {
       type: String,
-      required: true,
+      required: function() { return !this.googleId; },  // Yêu cầu username khi không có googleId
       unique: true,
     },
     email: {
@@ -19,11 +18,11 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       minLength: 6,
-      required: true,
+      required: function() { return !this.googleId; }, // Mật khẩu chỉ yêu cầu khi không có googleId
     },
     profilePicture: {
       type: String,
-      default: "",
+      default: "", // Bạn có thể dùng giá trị mặc định từ Google nếu cần
     },
     followers: {
       type: [String],
@@ -37,12 +36,17 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    googleId: {
+      type: String,
+      default: null, // Chứa googleId khi người dùng đăng nhập qua Google
+    },
   },
   {
-    timestamps: true,
+    timestamps: true, // Đảm bảo lưu thời gian tạo và cập nhật của bản ghi
   }
 );
 
+// Tạo model User từ schema
 const User = mongoose.model("User", userSchema);
 
 export default User;

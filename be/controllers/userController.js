@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/genarateTokenAndSetCookie.js";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import { verifyGoogleToken } from "../utils/google.js";
 
 //sign up
 const signupUser = async (req, res) => {
@@ -71,6 +72,34 @@ const loginUser = async (req, res) => {
     console.log("Error in loginUser", err.message);
   }
 };
+//google-login
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const googleUser = await verifyGoogleToken(token);
+    const { email, name, username, googleId, picture } = googleUser;
+    let user = await User.findOne({ googleId });
+    if (!user) {
+      user = new User({
+        email,
+        name,
+        username,
+        googleId,
+        profilePicture: picture,
+      });
+
+      await user.save();
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Google Login failed" });
+  }
+};
 
 // logout
 const logoutUser = async (req, res) => {
@@ -89,6 +118,7 @@ const followUnFollowUser = async (req, res) => {
     const { id } = req.params;
     const userToModify = await User.findById(id);
     const currentUser = await User.findById(req.user._id);
+    console.log("Khangdz", currentUser);
 
     if (!userToModify || !currentUser) {
       return res.status(400).json({ error: "User not found" });
@@ -241,6 +271,7 @@ const getSuggestedUsers = async (req, res) => {
 const getAllUser = async (req, res) => {
   try {
     const userId = req.user._id;
+    console.log("khangdz", userId);
 
     const users = await User.find({ _id: { $ne: userId } }).select("-password");
 
@@ -259,4 +290,5 @@ export {
   getUserProfile,
   getSuggestedUsers,
   getAllUser,
+  googleLogin,
 };

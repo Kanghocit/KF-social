@@ -1,8 +1,18 @@
-import { Avatar } from "@chakra-ui/avatar";
-import { Box, Flex, Link, Text, VStack } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
-import { Portal } from "@chakra-ui/portal";
-import { Button, useToast } from "@chakra-ui/react";
+import {
+	Avatar,
+	Box,
+	Flex,
+	Link,
+	Text,
+	VStack,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Portal,
+	Button,
+	useToast,
+  } from "@chakra-ui/react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 import { useRecoilValue } from "recoil";

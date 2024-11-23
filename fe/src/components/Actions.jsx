@@ -103,7 +103,6 @@ const Actions = ({ post }) => {
         setPosts(updatePosts);
       }
       setLiked(!liked);
-      console.log(data);
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
@@ -166,7 +165,7 @@ const Actions = ({ post }) => {
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent bg={"#232323"}>
             <ModalHeader></ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
@@ -180,9 +179,19 @@ const Actions = ({ post }) => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="blue"
+                sx={{
+                  backgroundColor: "#444", // Màu nền đen
+                  color: "#fff", // Màu chữ trắng
+                  borderRadius: "8px", // Bo góc 8px
+                  padding: "12px 24px", // Padding trên dưới 12px, trái phải 24px
+                  _hover: {
+                    backgroundColor: "#333", // Đổi màu khi hover
+                  },
+                  _active: {
+                    backgroundColor: "#111", // Đổi màu khi bấm giữ
+                  },
+                }}
                 size={"sm"}
-                mr={3}
                 isLoading={isReplying}
                 onClick={handleReply}
               >

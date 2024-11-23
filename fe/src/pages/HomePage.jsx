@@ -23,7 +23,7 @@ const HomePage = () => {
           showToast("Error", data.error.message, "error");
           return;
         }
-        console.log(data);
+     
         setPosts(Array.from(data));
       } catch (error) {
         showToast("Error", error.message, "error");

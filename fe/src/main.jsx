@@ -1,15 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, ColorModeScript } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
-import { extendTheme } from "@chakra-ui/react";
-import { ColorModeScript } from "@chakra-ui/react";
-
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
 import { RecoilRoot } from "recoil";
 import { SocketContextProvider } from "./context/SocketContext.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import "./index.css";
 
 const styles = {
   global: (props) => ({
@@ -34,6 +32,9 @@ const colors = {
 
 const theme = extendTheme({ config, styles, colors });
 
+// Lấy giá trị từ biến môi trường của Vite
+const clientId = import.meta.env.VITE_GG_CLIENT_ID;
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <RecoilRoot>
@@ -41,7 +42,9 @@ createRoot(document.getElementById("root")).render(
         <ChakraProvider theme={theme}>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <SocketContextProvider>
-            <App />
+            <GoogleOAuthProvider clientId={clientId}>
+              <App />
+            </GoogleOAuthProvider>
           </SocketContextProvider>
         </ChakraProvider>
       </BrowserRouter>

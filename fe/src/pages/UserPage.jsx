@@ -22,7 +22,7 @@ const UserPage = () => {
       try {
         const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
-        console.log(data);
+        
         setPosts(data);
       } catch (error) {
         showToast("Error", error.message, "error");

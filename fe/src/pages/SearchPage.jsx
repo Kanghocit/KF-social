@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Input,
-  Skeleton,
-  SkeletonCircle,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Input, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
 import SuggestedUser from "../components/SuggestedUser";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect, useState } from "react";
@@ -37,11 +30,19 @@ const SearchPage = () => {
       try {
         const res = await fetch("/api/users/search");
         const data = await res.json();
+        console.log("Fetched data:", data);  // Log the response to check its structure
+
         if (data.error) {
           showToast("Error", data.error, "error");
           return;
         }
-        setSuggestedUsers(data);
+
+        // Ensure data is an array before setting the state
+        if (Array.isArray(data)) {
+          setSuggestedUsers(data);
+        } else {
+          showToast("Error", "Invalid data format", "error");
+        }
       } catch (error) {
         showToast("Error", error.message, "error");
       } finally {
@@ -53,7 +54,7 @@ const SearchPage = () => {
   }, [showToast]);
 
   const filteredUsers = suggestedUsers.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    user.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
