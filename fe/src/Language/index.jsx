@@ -32,6 +32,9 @@ i18n
           yourconversation: "Your conversations",
           select: "Select a Conversation to start messaing",
           compose: "Compose a message...",
+          fullname: "Full name",
+          already: "Already a user?",
+          email: "Email address",
         },
       },
       vi: {
@@ -59,7 +62,9 @@ i18n
           yourconversation: "Những cuộc trò chuyện",
           select: "Chọn một người bạn để bắt đầu trò chuyện nào💕",
           compose: "Soạn tin nhắn...",
-
+          fullname: "Họ và tên",
+          already: "Đã có tài khoản?",
+          email: "Địa chỉ Email",
         
         },
       },
