@@ -35,6 +35,8 @@ i18n
           fullname: "Full name",
           already: "Already a user?",
           email: "Email address",
+          likes: "likes",
+          replies: "replies",
         },
       },
       vi: {
@@ -65,6 +67,8 @@ i18n
           fullname: "Họ và tên",
           already: "Đã có tài khoản?",
           email: "Địa chỉ Email",
+          likes: "lượt thích",
+          replies: "bình luận",
         
         },
       },

@@ -20,6 +20,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
+import { useTranslation } from "react-i18next";
 
 const Actions = ({ post }) => {
   const user = useRecoilValue(userAtom);
@@ -28,6 +29,7 @@ const Actions = ({ post }) => {
   const [isLiking, setIsLiking] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [reply, setReply] = useState("");
+  const { t } = useTranslation();
 
   const showToast = useShowToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -155,11 +157,11 @@ const Actions = ({ post }) => {
 
         <Flex gap={2} alignItems={"center"}>
           <Text color={"gray.light"} fontSize={"sm"}>
-            {post?.likes.length} likes
+            {post?.likes.length} {t('likes')}
           </Text>
           <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
           <Text color={"gray.light"} fontSize={"sm"}>
-            {post?.replies.length} replies
+            {post?.replies.length} {t('replies')}
           </Text>
         </Flex>
 
@@ -171,7 +173,7 @@ const Actions = ({ post }) => {
             <ModalBody pb={6}>
               <FormControl>
                 <Input
-                  placeholder="Reply....."
+                  placeholder={t('replies')}
                   value={reply}
                   onChange={(e) => setReply(e.target.value)}
                 />
@@ -195,7 +197,7 @@ const Actions = ({ post }) => {
                 isLoading={isReplying}
                 onClick={handleReply}
               >
-                Reply
+                {t('replies')}
               </Button>
             </ModalFooter>
           </ModalContent>
