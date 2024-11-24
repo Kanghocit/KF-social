@@ -159,14 +159,14 @@ export default function UpdateProfilePage() {
               type="text"
             />
           </FormControl>
-          <FormControl id="password">
+          {/* <FormControl id="password">
             <FormLabel>Password</FormLabel>
             <Input
               placeholder="password"
               _placeholder={{ color: "gray.500" }}
               type="password"
             />
-          </FormControl>
+          </FormControl> */}
           <Stack spacing={6} direction={["column", "row"]}>
             <Button
               bg={"red.400"}

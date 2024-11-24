@@ -18,6 +18,7 @@ import {
 } from "../atoms/messageAtom";
 import { BsFillImageFill } from "react-icons/bs";
 import usePreViewImg from "../hooks/usePreviewImg";
+import { useTranslation } from "react-i18next";
 
 const MessageInput = ({ setMessages }) => {
   const [messageText, setMessageText] = useState("");
@@ -83,8 +84,9 @@ const MessageInput = ({ setMessages }) => {
     setImgUrl(""); // Clear the image URL
     imageRef.current.value = null; // Reset the file input
   };
-
+  const { t } = useTranslation();
   return (
+    
     <Flex  gap={2} position="relative">
       
       {imgUrl && (
@@ -151,7 +153,7 @@ const MessageInput = ({ setMessages }) => {
           <InputGroup>
             <Input
               w={{ base: "400px", md: "500px" }}
-              placeholder="Type a message"
+              placeholder= {t('compose')}
               onChange={(e) => setMessageText(e.target.value)}
               value={messageText}
             />

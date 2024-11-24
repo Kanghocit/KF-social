@@ -14,19 +14,35 @@ import ChatPage from "./pages/ChatPage";
 import LeftSideBar from "./components/LeftSideBar";
 import SearchPage from "./pages/SearchPage";
 
+
 function App() {
   const user = useRecoilValue(userAtom);
-  const {pathname} = useLocation();
-
+  const { pathname } = useLocation();
+  const imgStyle = {
+    backgroundImage: "url('img2.jpg')" ,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    opacity:""
+  };
   return (
-    <Flex position="relative" w="full" minH="100vh">
+    <Flex
+      position="relative"
+      w="full"
+      minH="100vh"
+      style={pathname === "/auth" ? imgStyle : {}}
+    >
       {/* Left Sidebar positioned to the left */}
       <Box w="250px" p={4} position="sticky" top={0}>
         <LeftSideBar />
       </Box>
 
       {/* Main content */}
-      <Container maxW={pathname === "/" ? { base: "620px", md: "900px" } : "620px"} ml="200px"  mt="64px">
+      <Container
+        maxW={pathname === "/" ? { base: "620px", md: "900px" } : "620px"}
+        ml="200px"
+        mt="64px"
+      >
         <Header />
         <Routes>
           <Route

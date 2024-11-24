@@ -16,6 +16,7 @@ import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useMediaQuery } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
 import {
   conversationsAtom,
@@ -37,6 +38,7 @@ const ChatPage = () => {
   const { socket, onlineUsers } = useSocket();
   const [isLargerThan50Percent] = useMediaQuery("(min-width: 50rem)"); // Điều chỉnh giá trị "50rem" thành giá trị cụ thể theo yêu cầu
   // const otherUser = conversations.participants.find((p) =>p._id !== onlineUsers)
+  const { t } = useTranslation();
 
   useEffect(() => {
     socket?.on("messagesSeen", ({ conversationId }) => {
@@ -172,12 +174,12 @@ const ChatPage = () => {
               fontWeight={700}
               color={useColorModeValue("gray.600", "gray.400")}
             >
-              Your conversations
+              {t('yourconversation')}
             </Text>
             <form onSubmit={handleConversationSearch}>
               <Flex alignItems={"center"} gap={2}>
                 <Input
-                  placeholder="Search for a user"
+                  placeholder={t('search')}
                   onChange={(e) => setSearchText(e.target.value)}
                   value={searchText}
                 />
@@ -242,7 +244,7 @@ const ChatPage = () => {
             height={"400px"}
           >
             <GiConversation size={100} />
-            <Text fontSize={20}> Select a Conversation to start messaing</Text>
+            <Text fontSize={20}> {t('select')}</Text>
           </Flex>
         )}
         {selectedConversation._id && <MessageContainer />}

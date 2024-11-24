@@ -1,20 +1,29 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Flex,
+  IconButton,
   Image,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuItemOption,
+  MenuList,
+  MenuOptionGroup,
   useColorMode,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillChatQuoteFill } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
+import { IoSearch } from "react-icons/io5";
 import { Link, Link as RouterLink } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useLogout from "../hooks/useLogout";
-import { IoSearch } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const LeftSideBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,9 +32,20 @@ const LeftSideBar = () => {
   const logout = useLogout();
   const bg = {
     bg: "none",
-    _hover: { bg: "none" },
+    _hover: { bg: colorMode === "dark" ? "#1e1e1e" : "#cbd5e0" },
     _focus: { boxShadow: "none", outline: "none" },
   };
+  const bg1 = {
+    bg: colorMode === "dark" ? "#111" : "#cbd5e0",
+    _hover: { bg: colorMode === "dark" ? "#1e1e1e" : "#cbd5e0" },
+    _focus: { boxShadow: "none", outline: "none" },
+  };
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   return (
     <Flex
       flexDirection="column"
@@ -71,7 +91,62 @@ const LeftSideBar = () => {
 
       {/* Logout button at the bottom */}
       {user && (
-        <Button
+        <Menu closeOnSelect={false} cursor={'pointer'}>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<HamburgerIcon />}
+            bg={"none"}
+          />
+
+          <MenuList
+            minWidth="200px"
+            bg={colorMode === "dark" ? "#111" : "#cbd5e0"}
+          >
+            <Box
+              display="flex"
+              pl={9}
+              py={2}
+              {...bg1}
+              justifyContent="flex-start"
+              cursor={'pointer'}
+              onClick={() => changeLanguage("en")}
+            >
+              {t("english")}
+            </Box>
+            <Box
+              display="flex"
+              pl={9}
+              py={2}
+              {...bg1}
+              justifyContent="flex-start"
+              cursor={'pointer'}
+              onClick={() => changeLanguage("vi")}
+            >
+               {t("vietnamese")}
+            </Box>
+            <MenuDivider />
+            <Box
+              onClick={logout}
+              display="flex"
+              pl={9}
+              py={2}
+              justifyContent="flex-start"
+              {...bg1}
+              cursor={'pointer'}
+            >
+              {t('logout')}
+            </Box>
+          </MenuList>
+        </Menu>
+      )}
+    </Flex>
+  );
+};
+
+export default LeftSideBar;
+{
+  /* <Button
           onClick={logout}
           {...bg}
           display="flex"
@@ -79,10 +154,5 @@ const LeftSideBar = () => {
           justifyContent="center"
         >
           <FiLogOut size={20} />
-        </Button>
-      )}
-    </Flex>
-  );
-};
-
-export default LeftSideBar;
+        </Button> */
+}

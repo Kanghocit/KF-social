@@ -19,8 +19,10 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
+import { useTranslation } from "react-i18next";
 
 const UserHeader = ({ user }) => {
+	const { t } = useTranslation();
 	const toast = useToast();
 	const currentUser = useRecoilValue(userAtom); // logged in user
 	const { handleFollowUnfollow, following, updating } = useFollowUnfollow(user);
@@ -85,7 +87,7 @@ const UserHeader = ({ user }) => {
 			)}
 			{currentUser?._id !== user._id && (
 				<Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
-					{following ? "Unfollow" : "Follow"}
+					{following ? t("unfollow") : t('follow')}
 				</Button>
 			)}
 			<Flex w={"full"} justifyContent={"space-between"}>

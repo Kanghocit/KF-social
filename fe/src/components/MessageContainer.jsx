@@ -21,8 +21,10 @@ import userAtom from "../atoms/userAtom";
 import useFetchMessages from "../hooks/useFetchMessage.js";
 import { useEffect, useRef } from "react";
 import { useSocket } from "../context/SocketContext.jsx";
+import { useTranslation } from "react-i18next";
 
 const MessageContainer = () => {
+  const { t } = useTranslation();
   const { socket } = useSocket();
   const showToast = useShowToast();
   const selectedConversation = useRecoilValue(selectedConversationAtom);

@@ -20,6 +20,7 @@ import { useSetRecoilState } from "recoil";
 import authScreenAtom from "../atoms/authAtom";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +30,7 @@ export default function Login() {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const setUser = useSetRecoilState(userAtom);
   const showToast = useShowToast();
+  const { t } = useTranslation();
 
   // Handle regular login with username and password
   const handleLogin = async () => {
@@ -46,7 +48,7 @@ export default function Login() {
       }
       localStorage.setItem("users-KF", JSON.stringify(data));
       setUser(data);
-      showToast("Success", "Logged in successfully", "success");
+      showToast("Success", t("loginsuccess"), "success");
     } catch (error) {
       showToast("Error", error.message || "Something went wrong", "error");
     } finally {
@@ -80,7 +82,7 @@ export default function Login() {
 
       setUser(data);
 
-      showToast("Success", "Logged in with Google", "success");
+      showToast("Success", t("loginsuccess"), "success");
     } catch (error) {
       showToast("Error", "Google Login failed", "error");
     } finally {
@@ -91,21 +93,22 @@ export default function Login() {
   return (
     <Flex align={"center"} justify={"center"} py={12}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} w={"full"} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
-            Login
-          </Heading>
-        </Stack>
         <Box
           rounded={"lg"}
           bg={useColorModeValue("white", "gray.dark")}
           boxShadow={"lg"}
           p={8}
         >
-          <Stack spacing={4}>
+          <Stack align={"center"}>
+            <Heading fontSize={"4xl"} textAlign={"center"} mb={5}>
+              {t("login")}
+            </Heading>
+          </Stack>
+
+          <Stack spacing={4} pt={5}>
             {/* Username Input */}
             <FormControl isRequired>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>{t("username")}</FormLabel>
               <Input
                 type="text"
                 value={inputs.username}
@@ -117,7 +120,7 @@ export default function Login() {
 
             {/* Password Input */}
             <FormControl isRequired>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t("password")}</FormLabel>
               <InputGroup>
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -137,7 +140,7 @@ export default function Login() {
               </InputGroup>
             </FormControl>
 
-            <Stack spacing={6} pt={4}>
+            <Stack spacing={4} pt={4}>
               {/* Login Button */}
               <Button
                 isLoading={loading}
@@ -149,10 +152,11 @@ export default function Login() {
                 onClick={handleLogin}
                 w="full"
               >
-                Login
+                {t("login")}
               </Button>
-
-              {/* Google Login Button */}
+              <Box display="flex" alignItems="center" justifyContent="center">
+                {t("or")}
+              </Box>
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() =>
@@ -175,10 +179,10 @@ export default function Login() {
                       />
                     }
                     sx={{
-                      padding: 0, // Reset padding using sx
+                      padding: 0,
                     }}
                   >
-                    Login with Google
+                    {t("loginwithGoogle")}
                   </Button>
                 )}
               />
@@ -187,12 +191,12 @@ export default function Login() {
             {/* Link to Sign up */}
             <Stack pt={6}>
               <Text align={"center"}>
-                Don't have an account?{" "}
+                {t("noneAccount")}{" "}
                 <Link
                   color={"blue.400"}
                   onClick={() => setAuthScreen("signup")}
                 >
-                  Sign up
+                  {t("signup")}
                 </Link>
               </Text>
             </Stack>

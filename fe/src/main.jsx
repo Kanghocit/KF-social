@@ -8,6 +8,7 @@ import { RecoilRoot } from "recoil";
 import { SocketContextProvider } from "./context/SocketContext.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
+import '../src/Language/index.jsx';
 
 const styles = {
   global: (props) => ({

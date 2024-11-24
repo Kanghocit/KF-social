@@ -2,11 +2,13 @@ import { Box, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import SuggestedUser from "./SuggestedUser";
 import useShowToast from "../hooks/useShowToast";
+import { useTranslation } from "react-i18next";
 
 const SuggestedUsers = () => {
   const [loading, setLoading] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const showToast = useShowToast();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const getSuggestedUsers = async () => {
@@ -37,7 +39,7 @@ const SuggestedUsers = () => {
   return (
     <>
       <Text mb={4} fontWeight={"bold"}>
-        Suggested Users
+        {t('suggest')}
       </Text>
       <Flex direction={"column"} gap={4}>
         {!loading && Array.isArray(suggestedUsers) && suggestedUsers.length > 0 ? (
@@ -58,7 +60,7 @@ const SuggestedUsers = () => {
             </Flex>
           ))
         ) : (
-          <Text>No users to display</Text>
+          <Text>{t('nouser')}</Text>
         )}
       </Flex>
     </>

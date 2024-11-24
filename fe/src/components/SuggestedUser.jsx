@@ -1,9 +1,11 @@
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
+import { useTranslation } from "react-i18next";
 
 const SuggestedUser = ({ user }) => {
-	console.log(user)
+	const { t } = useTranslation();
+
 	const { handleFollowUnfollow, following, updating } = useFollowUnfollow(user);
 
 	return (
@@ -32,7 +34,7 @@ const SuggestedUser = ({ user }) => {
 					opacity: ".8",
 				}}
 			>
-				{following ? "Unfollow" : "Follow"}
+				{following ? t("unfollow") : t('follow')}
 			</Button>
 		</Flex>
 	);

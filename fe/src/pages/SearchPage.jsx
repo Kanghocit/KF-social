@@ -1,7 +1,15 @@
-import { Box, Flex, Input, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Input,
+  Skeleton,
+  SkeletonCircle,
+  Text,
+} from "@chakra-ui/react";
 import SuggestedUser from "../components/SuggestedUser";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const UserSkeleton = () => (
   <Flex gap={2} alignItems={"center"} p={"1"} borderRadius={"md"}>
@@ -23,14 +31,14 @@ const SearchPage = () => {
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const showToast = useShowToast();
-
+  const { t } = useTranslation();
   useEffect(() => {
     const getSuggestedUsers = async () => {
       setLoading(true);
       try {
         const res = await fetch("/api/users/search");
         const data = await res.json();
-        console.log("Fetched data:", data);  // Log the response to check its structure
+        console.log("Fetched data:", data); // Log the response to check its structure
 
         if (data.error) {
           showToast("Error", data.error, "error");
@@ -60,10 +68,10 @@ const SearchPage = () => {
   return (
     <>
       <Text mb={4} fontWeight={"bold"} color={"#777777"}>
-        Suggested Users
+       {t('suggest')}
       </Text>
       <Input
-        placeholder="Search users..."
+        placeholder= {t('search')}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         mb={4}
