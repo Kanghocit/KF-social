@@ -91,36 +91,45 @@ export default function Login() {
   };
 
   return (
-    <Flex align={"center"} justify={"center"} py={12}>
+    <Flex align={"center"} justify={"center"}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} w={"full"} px={6}>
         <Box
           rounded={"lg"}
-          bg={useColorModeValue("white", "gray.dark")}
-          boxShadow={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"2xl"}
           p={8}
+          borderColor={useColorModeValue("blue.300", "blue.600")}
+          borderWidth="1px"
         >
           <Stack align={"center"}>
-            <Heading fontSize={"4xl"} textAlign={"center"} mb={5}>
+            <Heading
+              fontSize={"4xl"}
+              textAlign={"center"}
+              mb={5}
+              bgGradient="linear(to-r, blue.500, teal.400)"
+              bgClip="text"
+            >
               {t("login")}
             </Heading>
           </Stack>
 
-          <Stack spacing={4} pt={5}>
+          <Stack spacing={6} pt={5}>
             {/* Username Input */}
             <FormControl isRequired>
-              <FormLabel>{t("username")}</FormLabel>
+              <FormLabel color="gray.600">{t("username")}</FormLabel>
               <Input
                 type="text"
                 value={inputs.username}
                 onChange={(e) =>
                   setInputs({ ...inputs, username: e.target.value })
                 }
+                focusBorderColor="blue.400"
               />
             </FormControl>
 
             {/* Password Input */}
             <FormControl isRequired>
-              <FormLabel>{t("password")}</FormLabel>
+              <FormLabel color="gray.600">{t("password")}</FormLabel>
               <InputGroup>
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -128,6 +137,7 @@ export default function Login() {
                   onChange={(e) =>
                     setInputs({ ...inputs, password: e.target.value })
                   }
+                  focusBorderColor="blue.400"
                 />
                 <InputRightElement h={"full"}>
                   <Button
@@ -140,61 +150,77 @@ export default function Login() {
               </InputGroup>
             </FormControl>
 
-            <Stack spacing={4} pt={4}>
-              {/* Login Button */}
-              <Button
-                isLoading={loading}
-                loadingText="Logging in"
-                size="lg"
-                bg={useColorModeValue("gray.600", "gray.800")}
-                color={"white"}
-                _hover={{ bg: useColorModeValue("gray.700", "gray.900") }}
-                onClick={handleLogin}
-                w="full"
-              >
-                {t("login")}
-              </Button>
-              <Box display="flex" alignItems="center" justifyContent="center">
-                {t("or")}
-              </Box>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() =>
-                  showToast("Error", "Google Login failed", "error")
-                }
-                size="large"
-                disabled={googleLoading}
-                width={"400px"}
-                render={(renderProps) => (
-                  <Button
-                    {...renderProps}
-                    isLoading={googleLoading}
-                    loadingText="Logging in with Google"
-                    alignItems={"center"}
-                    leftIcon={
-                      <img
-                        src="google-icon.svg"
-                        alt="Google Icon"
-                        width="20px"
-                      />
-                    }
-                    sx={{
-                      padding: 0,
-                    }}
-                  >
-                    {t("loginwithGoogle")}
-                  </Button>
-                )}
-              />
-            </Stack>
+            {/* Login Button */}
+            <Button
+              isLoading={loading}
+              loadingText={t("loggingIn")}
+              size="lg"
+              bgGradient="linear(to-r, blue.500, blue.700)"
+              color={"white"}
+              _hover={{
+                bgGradient: "linear(to-r, blue.600, blue.800)",
+                transform: "scale(1.05)",
+                transition: "all 0.3s ease",
+              }}
+              onClick={handleLogin}
+              w="full"
+            >
+              {t("login")}
+            </Button>
+
+            <Text textAlign={"center"} color="gray.500" pt={2}>
+              {t("or")}
+            </Text>
+
+            {/* Google Login Button */}
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => showToast("Error", "Google Login failed", "error")}
+              size="large"
+              disabled={googleLoading}
+              width={"400px"}
+              render={(renderProps) => (
+                <Button
+                  {...renderProps}
+                  isLoading={googleLoading}
+                  loadingText={t("loggingInGoogle")}
+                  alignItems={"center"}
+                  leftIcon={
+                    <img
+                      src="google-icon.svg"
+                      alt="Google Icon"
+                      width="20px"
+                      style={{ marginRight: "8px" }}
+                    />
+                  }
+                  bg="white"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  _hover={{
+                    bg: "blue.50",
+                    transform: "scale(1.05)",
+                    transition: "all 0.3s ease",
+                  }}
+                  _active={{ transform: "scale(0.98)" }}
+                  w="full"
+                >
+                  {t("loginwithGoogle")}
+                </Button>
+              )}
+            />
 
             {/* Link to Sign up */}
             <Stack pt={6}>
-              <Text align={"center"}>
+              <Text align={"center"} color="gray.600">
                 {t("noneAccount")}{" "}
                 <Link
-                  color={"blue.400"}
+                  color={"blue.500"}
+                  fontWeight="bold"
                   onClick={() => setAuthScreen("signup")}
+                  _hover={{
+                    textDecoration: "underline",
+                    color: "blue.600",
+                  }}
                 >
                   {t("signup")}
                 </Link>

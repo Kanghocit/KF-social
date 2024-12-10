@@ -8,13 +8,10 @@ import {
   Menu,
   MenuButton,
   MenuDivider,
-  MenuItem,
-  MenuItemOption,
   MenuList,
-  MenuOptionGroup,
-  useColorMode,
-  useDisclosure,
+  useColorMode
 } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillChatQuoteFill } from "react-icons/bs";
 import { IoSearch } from "react-icons/io5";
@@ -22,13 +19,12 @@ import { Link, Link as RouterLink } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useLogout from "../hooks/useLogout";
-import { FiLogOut } from "react-icons/fi";
-import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
-const LeftSideBar = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const LeftSideBar = ({ onOpen }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const user = useRecoilValue(userAtom);
+  const { pathname } = useLocation();
   const logout = useLogout();
   const bg = {
     bg: "none",
@@ -46,6 +42,7 @@ const LeftSideBar = () => {
     i18n.changeLanguage(lng);
   };
 
+  
   return (
     <Flex
       flexDirection="column"
@@ -78,7 +75,7 @@ const LeftSideBar = () => {
               <IoSearch size={26} />
             </Link>
           </Button>
-          <Button onClick={onOpen} {...bg}>
+          <Button onClick={pathname === "/" || pathname === "/" + user.username ? onOpen : ""} {...bg}>
             <AddIcon />
           </Button>
           <Button {...bg}>
@@ -91,7 +88,7 @@ const LeftSideBar = () => {
 
       {/* Logout button at the bottom */}
       {user && (
-        <Menu closeOnSelect={false} cursor={'pointer'}>
+        <Menu closeOnSelect={false} cursor={"pointer"}>
           <MenuButton
             as={IconButton}
             aria-label="Options"
@@ -109,7 +106,7 @@ const LeftSideBar = () => {
               py={2}
               {...bg1}
               justifyContent="flex-start"
-              cursor={'pointer'}
+              cursor={"pointer"}
               onClick={() => changeLanguage("en")}
             >
               {t("english")}
@@ -120,10 +117,10 @@ const LeftSideBar = () => {
               py={2}
               {...bg1}
               justifyContent="flex-start"
-              cursor={'pointer'}
+              cursor={"pointer"}
               onClick={() => changeLanguage("vi")}
             >
-               {t("vietnamese")}
+              {t("vietnamese")}
             </Box>
             <MenuDivider />
             <Box
@@ -133,9 +130,9 @@ const LeftSideBar = () => {
               py={2}
               justifyContent="flex-start"
               {...bg1}
-              cursor={'pointer'}
+              cursor={"pointer"}
             >
-              {t('logout')}
+              {t("logout")}
             </Box>
           </MenuList>
         </Menu>

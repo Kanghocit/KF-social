@@ -16,21 +16,20 @@ import {
   Text,
   Textarea,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
-import useShowToast from "../hooks/useShowToast";
-import postsAtom from "../atoms/postsAtom";
 import { useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import postsAtom from "../atoms/postsAtom";
+import userAtom from "../atoms/userAtom";
+import usePreviewImg from "../hooks/usePreviewImg";
+import useShowToast from "../hooks/useShowToast";
+import { useLocation } from "react-router-dom";
 
 const MAX_CHAR = 500;
 
-const CreatePost = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const CreatePost = ({ isOpen, onClose, onOpen }) => {
   const [postText, setPostText] = useState("");
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
   const imageRef = useRef(null);
@@ -40,6 +39,8 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useRecoilState(postsAtom);
   const { username } = useParams();
+  const { pathname } = useLocation();
+
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -88,16 +89,18 @@ const CreatePost = () => {
 
   return (
     <>
-      <Button
-        position={"fixed"}
-        bottom={10}
-        right={5}
-        size={{ base: "sm", sm: "md", md: "lg" }}
-        bg={useColorModeValue("gray.300", "gray.dark")}
-        onClick={onOpen}
-      >
-        <AddIcon />
-      </Button>
+      {pathname ===  "/" + user.username && (
+        <Button
+          position={"fixed"}
+          bottom={10}
+          right={5}
+          size={{ base: "sm", sm: "md", md: "lg" }}
+          bg={useColorModeValue("gray.300", "gray.dark")}
+          onClick={onOpen}
+        >
+          <AddIcon />
+        </Button>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -164,15 +167,15 @@ const CreatePost = () => {
               onClick={handleCreatePost}
               isLoading={loading}
               sx={{
-                backgroundColor: "#444", // Màu nền đen
-                color: "#fff", // Màu chữ trắng
-                borderRadius: "8px", // Bo góc 8px
-                padding: "12px 24px", // Padding trên dưới 12px, trái phải 24px
+                backgroundColor: "#444",
+                color: "#fff",
+                borderRadius: "8px",
+                padding: "12px 24px",
                 _hover: {
-                  backgroundColor: "#333", // Đổi màu khi hover
+                  backgroundColor: "#333",
                 },
                 _active: {
-                  backgroundColor: "#111", // Đổi màu khi bấm giữ
+                  backgroundColor: "#111",
                 },
               }}
             >

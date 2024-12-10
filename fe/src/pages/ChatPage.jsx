@@ -82,9 +82,13 @@ const ChatPage = () => {
 
   const handleConversationSearch = async (e) => {
     e.preventDefault();
+    if (!searchText.trim()) {
+      showToast("Error", "Please enter a username to search.", "error");
+      return;
+    }
     setSearchingUser(true);
     try {
-      const res = await fetch(`/api/users/profile/${searchText}`);
+      const res = await fetch(`/api/users/profile/${searchText.trim()}`);
       const searchedUser = await res.json();
 
       if (searchedUser.error) {
@@ -92,44 +96,44 @@ const ChatPage = () => {
         return;
       }
 
-      const messagingYourself = searchedUser._id === currentUser._id;
-      if (messagingYourself) {
-        showToast("Error", "You cannot message yourself", "error");
+      if (searchedUser._id === currentUser._id) {
+        showToast("Error", "You cannot message yourself.", "error");
         return;
       }
-      const conversationAlreadyExists = conversations.find(
+
+      const existingConversation = conversations.find(
         (conversation) => conversation.participants[0]._id === searchedUser._id
       );
-      if (conversationAlreadyExists) {
+
+      if (existingConversation) {
         setSelectedConversation({
-          _id: conversationAlreadyExists._id,
+          _id: existingConversation._id,
           userId: searchedUser._id,
           username: searchedUser.username,
           userProfilePicture: searchedUser.profilePicture,
         });
+      } else {
+        const mockConversation = {
+          mock: true,
+          lastMessage: { text: "", sender: "" },
+          _id: Date.now().toString(),
+          participants: [
+            {
+              _id: searchedUser._id,
+              username: searchedUser.username,
+              profilePicture: searchedUser.profilePicture,
+            },
+          ],
+        };
+        setConversations((prev) => [...prev, mockConversation]);
       }
-
-      const mockConversation = {
-        mock: true,
-        lastMessage: {
-          text: "",
-          sender: "",
-        },
-        _id: Date.now(),
-        participants: [
-          {
-            _id: searchedUser._id,
-            username: searchedUser.username,
-            profilePicture: searchedUser.profilePicture,
-          },
-        ],
-      };
       setSearchText("");
-      if (!conversationAlreadyExists) {
-        setConversations((prevConns) => [...prevConns, mockConversation]);
-      }
     } catch (error) {
-      showToast("Error", error.message, "error");
+      showToast(
+        "Error",
+        error.message || "An unexpected error occurred.",
+        "error"
+      );
     } finally {
       setSearchingUser(false);
     }
@@ -174,12 +178,12 @@ const ChatPage = () => {
               fontWeight={700}
               color={useColorModeValue("gray.600", "gray.400")}
             >
-              {t('yourconversation')}
+              {t("yourconversation")}
             </Text>
             <form onSubmit={handleConversationSearch}>
               <Flex alignItems={"center"} gap={2}>
                 <Input
-                  placeholder={t('search')}
+                  placeholder={t("search")}
                   onChange={(e) => setSearchText(e.target.value)}
                   value={searchText}
                 />
@@ -212,24 +216,29 @@ const ChatPage = () => {
                 </Flex>
               ))}
 
-            {!loadingConversations &&
-              conversations
-                .filter((conversation) => {
-                  return conversation.participants.some(
-                    (participant) => participant._id === currentUser._id
-                  );
-                })
-                .map((conversation) => (
-                  <Conversation
-                    key={conversation._id}
-                    isOnline={conversation.participants.some(
-                      (participant) =>
-                        participant._id !== currentUser._id &&
-                        onlineUsers.includes(participant._id)
-                    )}
-                    conversation={conversation}
-                  />
-                ))}
+            <Box
+              maxH="450px" // Giới hạn chiều cao (tùy chỉnh theo ý bạn)
+              overflowY="auto" // Thêm thanh cuộn dọc khi danh sách dài
+            >
+              {!loadingConversations &&
+                conversations
+                  .filter((conversation) => {
+                    return conversation.participants.some(
+                      (participant) => participant._id === currentUser._id
+                    );
+                  })
+                  .map((conversation) => (
+                    <Conversation
+                      key={conversation._id}
+                      isOnline={conversation.participants.some(
+                        (participant) =>
+                          participant._id !== currentUser._id &&
+                          onlineUsers.includes(participant._id)
+                      )}
+                      conversation={conversation}
+                    />
+                  ))}
+            </Box>
           </Flex>
         )}
 
@@ -244,7 +253,7 @@ const ChatPage = () => {
             height={"400px"}
           >
             <GiConversation size={100} />
-            <Text fontSize={20}> {t('select')}</Text>
+            <Text fontSize={20}> {t("select")}</Text>
           </Flex>
         )}
         {selectedConversation._id && <MessageContainer />}

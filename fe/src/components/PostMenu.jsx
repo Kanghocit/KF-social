@@ -25,14 +25,16 @@ import {
 } from "@chakra-ui/react";
 import { BsFillImageFill, BsThreeDots } from "react-icons/bs";
 import { DeleteIcon, EditIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import { useRef, useState } from "react";
 import usePreviewImg from "../hooks/usePreviewImg";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
+import { useLocation } from "react-router-dom";
 
 const PostMenu = ({ user, post }) => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const imageRef = useRef(null);
   const [updating, setUpdating] = useState(false);
@@ -67,7 +69,11 @@ const PostMenu = ({ user, post }) => {
         return;
       }
       showToast("Success", "Post updated successfully!", "success");
-      setPosts(posts.map(p => p._id === post._id ? { ...p, ...inputs, img: imgUrl } : p));
+      setPosts(
+        posts.map((p) =>
+          p._id === post._id ? { ...p, ...inputs, img: imgUrl } : p
+        )
+      );
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
@@ -119,30 +125,43 @@ const PostMenu = ({ user, post }) => {
       <Menu closeOnSelect={true}>
         <MenuButton as={IconButton} icon={<BsThreeDots />} variant="ghost" />
         <MenuList minWidth="240px" borderRadius="lg" bg={"gray.dark"}>
-          <MenuItem
-            onClick={OpenEditMenu}
-            bg={"gray.dark"}
-            _active={{ bg: "gray.dark" }}
-          >
-            <Flex justifyContent="space-between" alignItems="center" w="100%">
-              <Text fontWeight="bold">Edit</Text>
-              <EditIcon />
-            </Flex>
-          </MenuItem>
-          <MenuDivider />
-          <MenuItem
-            onClick={handleDeleteClick}
-            bg={"gray.dark"}
-            _active={{ bg: "gray.dark" }}
-          >
-            <Flex justifyContent="space-between" alignItems="center" w="100%">
-              <Text color="red.500" fontWeight="bold">
-                Delete
-              </Text>
-              <DeleteIcon color="red.500" />
-            </Flex>
-          </MenuItem>
-          <MenuDivider />
+          {pathname !== "/" && (
+            <>
+              <MenuItem
+                onClick={OpenEditMenu}
+                bg={"gray.dark"}
+                _active={{ bg: "gray.dark" }}
+              >
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                  w="100%"
+                >
+                  <Text fontWeight="bold">Edit</Text>
+                  <EditIcon />
+                </Flex>
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                onClick={handleDeleteClick}
+                bg={"gray.dark"}
+                _active={{ bg: "gray.dark" }}
+              >
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                  w="100%"
+                >
+                  <Text color="red.500" fontWeight="bold">
+                    Delete
+                  </Text>
+                  <DeleteIcon color="red.500" />
+                </Flex>
+              </MenuItem>
+              <MenuDivider />
+            </>
+          )}
+
           <MenuItem bg={"gray.dark"} onClick={copyURL}>
             Copy link
           </MenuItem>

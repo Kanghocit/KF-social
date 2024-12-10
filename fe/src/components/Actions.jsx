@@ -182,15 +182,15 @@ const Actions = ({ post }) => {
             <ModalFooter>
               <Button
                 sx={{
-                  backgroundColor: "#444", // Màu nền đen
-                  color: "#fff", // Màu chữ trắng
-                  borderRadius: "8px", // Bo góc 8px
-                  padding: "12px 24px", // Padding trên dưới 12px, trái phải 24px
+                  backgroundColor: "#444", 
+                  color: "#fff", 
+                  borderRadius: "8px",
+                  padding: "12px 24px", 
                   _hover: {
-                    backgroundColor: "#333", // Đổi màu khi hover
+                    backgroundColor: "#333", 
                   },
                   _active: {
-                    backgroundColor: "#111", // Đổi màu khi bấm giữ
+                    backgroundColor: "#111", 
                   },
                 }}
                 size={"sm"}

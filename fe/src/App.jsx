@@ -13,17 +13,18 @@ import CreatePost from "./components/CreatePost";
 import ChatPage from "./pages/ChatPage";
 import LeftSideBar from "./components/LeftSideBar";
 import SearchPage from "./pages/SearchPage";
-
+import { useDisclosure } from "@chakra-ui/react";
 
 function App() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useRecoilValue(userAtom);
   const { pathname } = useLocation();
   const imgStyle = {
-    backgroundImage: "url('img2.jpg')" ,
+    backgroundImage: "url('img2.jpg')",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    opacity:""
+    opacity: "",
   };
   return (
     <Flex
@@ -32,12 +33,10 @@ function App() {
       minH="100vh"
       style={pathname === "/auth" ? imgStyle : {}}
     >
-      {/* Left Sidebar positioned to the left */}
       <Box w="250px" p={4} position="sticky" top={0}>
-        <LeftSideBar />
+        <LeftSideBar onOpen={onOpen} />
       </Box>
 
-      {/* Main content */}
       <Container
         maxW={pathname === "/" ? { base: "620px", md: "900px" } : "620px"}
         ml="200px"
@@ -63,7 +62,12 @@ function App() {
             element={
               user ? (
                 <>
-                  <UserPage /> <CreatePost />
+                  <UserPage />{" "}
+                  <CreatePost
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onOpen={onOpen}
+                  />
                 </>
               ) : (
                 <UserPage />
@@ -77,7 +81,9 @@ function App() {
             element={user ? <ChatPage /> : <Navigate to={"/auth"} />}
           />
         </Routes>
-
+      
+          <CreatePost isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+   
         {user && <LogoutButton />}
       </Container>
     </Flex>
